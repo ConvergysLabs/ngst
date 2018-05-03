@@ -1,0 +1,6 @@
+<mat-form-field [class.ngst-full-width]="fullWidth">
+  <input matInput
+         [placeholder]="showPlaceholder ? column.label: ''"
+         [(ngModel)]="value"
+         (change)="changed()">
+</mat-form-field>

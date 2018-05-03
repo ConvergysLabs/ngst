@@ -1,0 +1,67 @@
+<div class="ngst-container">
+  <div class="ngst-header">
+    <!--Title-->
+    <div class="ngst-title">{{title}}</div>
+
+    <!--Add button-->
+    <div class="ngst-button-container">
+      <button color="primary" mat-mini-fab class="ngst-add-button" *ngIf="canCreate" (click)="addRow()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!--Table-->
+  <mat-table #table [dataSource]="dataSource" matSort>
+    <!--Actions-->
+    <ng-container matColumnDef="ngst-actions" *ngIf="canDelete">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-button
+                (click)="deleteRow(row)"
+                class="ngst-small-button"
+                color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <!--Columns-->
+    <ng-container *ngFor="let column of columns" [matColumnDef]="column.label">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>{{column.label}}</mat-header-cell>
+      <mat-cell *matCellDef="let row" (click)="click(row, column)">
+        <!--Edit-->
+        <ng-container *ngIf="row === editRow && column === editColumn && column.editor && canEdit">
+          <!--Polymorphism is hot!-->
+          <ngst-editor-container [item]="row"
+                                 [column]="column"
+                                 [showPlaceholder]="false"
+                                 (changedEmitter)="changeRow(row, column, $event)">
+          </ngst-editor-container>
+        </ng-container>
+
+        <!--Display-->
+        <ng-container *ngIf="row != editRow || column != editColumn || !column.editor || !canEdit">
+          <span *ngIf="!isEmpty(column.getRowValue(row)) && !column.editor || !canEdit"
+                class="ngst-not-editable">{{column.formatValue(row)}}</span>
+          <span *ngIf="!isEmpty(column.getRowValue(row)) && column.editor && canEdit"
+                class="ngst-editable">{{column.formatValue(row)}}</span>
+          <span *ngIf="isEmpty(column.getRowValue(row)) && column.editor && canEdit"
+                class="ngst-editable ngst-empty">empty</span>
+          <span *ngIf="isEmpty(column.getRowValue(row)) && (!column.editor || !canEdit)"
+                class="ngst-not-editable ngst-empty">empty</span>
+        </ng-container>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnIndexes"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columnIndexes;"></mat-row>
+  </mat-table>
+
+  <!--Paginator-->
+  <mat-paginator #paginator
+                 [pageSize]="5"
+                 [pageSizeOptions]="[5, 10, 25, 100]"
+                 [showFirstLastButtons]="true">
+  </mat-paginator>
+</div>

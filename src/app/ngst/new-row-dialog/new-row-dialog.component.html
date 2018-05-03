@@ -1,0 +1,20 @@
+<div class="ngst-new-row-dialog">
+  <ng-container *ngFor="let column of columns">
+    <ngst-editor-container *ngIf="column.editor"
+                           [item]="newRow"
+                           [column]="column"
+                           [showPlaceholder]="true"
+                           [fullWidth]="true"
+                           (changedEmitter)="change(column, $event)">
+    </ngst-editor-container>
+  </ng-container>
+
+  <button mat-raised-button color="primary" (click)="dialogRef.close(newRow)"
+          [disabled]="!isValid()">
+    Create
+  </button>
+
+  <button mat-raised-button (click)="dialogRef.close()">
+    Cancel
+  </button>
+</div>

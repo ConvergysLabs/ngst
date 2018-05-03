@@ -1,0 +1,43 @@
+.ngst-container {
+  width: 80%;
+  margin: auto;
+}
+
+.ngst-header {
+  display: table-row;
+}
+
+.ngst-title {
+  display: table-cell;
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  width: 100%;
+}
+
+.ngst-button-container {
+  display: table-cell;
+}
+
+.ngst-add-button {
+}
+
+.mat-column-ngst-actions {
+  flex: 0 0 100px;
+}
+
+.ngst-small-button {
+  min-width: 1%;
+}
+
+.ngst-editable {
+  cursor: text;
+}
+
+.ngst-not-editable {
+  cursor: default;
+}
+
+.ngst-empty {
+  font-style: italic;
+  color: lightgray;
+}
