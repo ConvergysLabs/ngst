@@ -7,12 +7,12 @@ import {Column} from '../table/ngst-model';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
-  protected item: any;
-  protected column: Column;
-  protected showPlaceholder: boolean = false;
-  protected fullWidth: boolean = false;
-  protected value: any;
-  protected changedEmitter: EventEmitter<any>;
+  public item: any;
+  public column: Column;
+  public showPlaceholder: boolean = false;
+  public fullWidth: boolean = false;
+  public value: any;
+  public changedEmitter: EventEmitter<any>;
 
   constructor() {
   }

@@ -11,6 +11,8 @@ import {NgstModule} from './ngst/ngst.module';
     BrowserModule,
     NgstModule
   ],
+  exports: [
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

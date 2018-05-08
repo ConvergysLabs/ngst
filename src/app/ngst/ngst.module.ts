@@ -40,7 +40,8 @@ import {NewRowDialogComponent} from './new-row-dialog/new-row-dialog.component';
     NewRowDialogComponent
   ],
   exports: [
-    TableComponent
+    TableComponent,
+    EditorComponent
   ],
   entryComponents: [
     EditorComponent,

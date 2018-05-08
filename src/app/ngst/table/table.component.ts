@@ -23,7 +23,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource();
   columnIndexes: Array<string> = [];
 
   editRow: any;
@@ -33,6 +33,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit() {
+    // this.updateTable();
   }
 
   ngOnChanges() {
@@ -40,19 +41,16 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.updateTable();
+    this.sortAndPaginate();
   }
 
   updateTable() {
-    this.dataSource = new MatTableDataSource(this.rowData);
+    this.dataSource.data = this.rowData;
     this.dataSource.sortingDataAccessor = (data: any, sortHeaderId: string): string | number => {
       // Get the column with the header id
       const column = this.columns.filter(c => c.label === sortHeaderId)[0];
       return column.getRowValue(data);
     };
-
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
 
     this.columnIndexes = [];
     if (this.canDelete) {
@@ -63,6 +61,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     // Reset editors
     this.editRow = null;
     this.editColumn = null;
+  }
+
+  sortAndPaginate() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   isEmpty(value: any) {
