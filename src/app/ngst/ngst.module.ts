@@ -16,6 +16,7 @@ import {EditorComponent} from './editor/editor.component';
 import {EditorContainerComponent} from './editor-container/editor-container.component';
 import {FormsModule} from '@angular/forms';
 import {NewRowDialogComponent} from './new-row-dialog/new-row-dialog.component';
+import {StopPropogationDirective} from './directives/stop-propogation.directive';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import {NewRowDialogComponent} from './new-row-dialog/new-row-dialog.component';
     PolymorphicContainerDirective,
     EditorComponent,
     EditorContainerComponent,
-    NewRowDialogComponent
+    NewRowDialogComponent,
+    StopPropogationDirective
   ],
   exports: [
     TableComponent,

@@ -1,5 +1,5 @@
 .ngst-container {
-  width: 80%;
+  width: 100%;
   margin: auto;
 }
 
@@ -40,4 +40,9 @@
 .ngst-empty {
   font-style: italic;
   color: lightgray;
+}
+
+.ngst-clickable:hover {
+  cursor: pointer;
+  background-color: lightgrey;
 }

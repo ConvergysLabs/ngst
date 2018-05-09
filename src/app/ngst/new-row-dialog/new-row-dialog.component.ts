@@ -16,7 +16,7 @@ export class NewRowDialogComponent implements OnInit {
   }
 
   change(column: Column, newValue: any) {
-    this.newRow[column.accessor] = newValue;
+    this.newRow[column.accessor] = column.formatter.parse(newValue);
   }
 
   ngOnInit() {

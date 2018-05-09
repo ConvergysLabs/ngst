@@ -18,6 +18,7 @@
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let row">
         <button mat-button
+                ngstStopPropogation
                 (click)="deleteRow(row)"
                 class="ngst-small-button"
                 color="warn">
@@ -29,7 +30,7 @@
     <!--Columns-->
     <ng-container *ngFor="let column of columns" [matColumnDef]="column.label">
       <mat-header-cell *matHeaderCellDef mat-sort-header>{{column.label}}</mat-header-cell>
-      <mat-cell *matCellDef="let row" (click)="click(row, column)">
+      <mat-cell *matCellDef="let row">
         <!--Edit-->
         <ng-container *ngIf="row === editRow && column === editColumn && column.editor && canEdit">
           <!--Polymorphism is hot!-->
@@ -42,20 +43,29 @@
 
         <!--Display-->
         <ng-container *ngIf="row != editRow || column != editColumn || !column.editor || !canEdit">
+          <!--Not editable-->
           <span *ngIf="!isEmpty(column.getRowValue(row)) && !column.editor || !canEdit"
+                [class.ngst-clickable]="canClick"
                 class="ngst-not-editable">{{column.formatValue(row)}}</span>
+          <span *ngIf="isEmpty(column.getRowValue(row)) && (!column.editor || !canEdit)"
+                [class.ngst-clickable]="canClick"
+                class="ngst-not-editable ngst-empty">empty</span>
+
+          <!--Editable-->
           <span *ngIf="!isEmpty(column.getRowValue(row)) && column.editor && canEdit"
+                (click)="clickCell(row, column)" ngstStopPropogation
                 class="ngst-editable">{{column.formatValue(row)}}</span>
           <span *ngIf="isEmpty(column.getRowValue(row)) && column.editor && canEdit"
+                (click)="clickCell(row, column)" ngstStopPropogation
                 class="ngst-editable ngst-empty">empty</span>
-          <span *ngIf="isEmpty(column.getRowValue(row)) && (!column.editor || !canEdit)"
-                class="ngst-not-editable ngst-empty">empty</span>
         </ng-container>
       </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="columnIndexes"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: columnIndexes;"></mat-row>
+    <mat-row *matRowDef="let row; columns: columnIndexes;"
+             [class.ngst-clickable]="canClick"
+             (click)="clickRow(row)"></mat-row>
   </mat-table>
 
   <!--Paginator-->

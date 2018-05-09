@@ -31,6 +31,6 @@ export class EditorComponent implements OnInit {
   }
 
   changed() {
-    this.changedEmitter.emit(this.value);
+    this.changedEmitter.emit(this.column.formatter.parse(this.value));
   }
 }

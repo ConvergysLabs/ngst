@@ -4,7 +4,9 @@
             [canDelete]="true"
             [canCreate]="true"
             [canEdit]="true"
+            [canClick]="true"
             (rowChanged)="change($event)"
             (rowDeleted)="delete($event)"
-            (rowAdded)="add($event)">
+            (rowAdded)="add($event)"
+            (rowClicked)="click($event)">
 </ngst-table>

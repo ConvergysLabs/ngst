@@ -2,7 +2,7 @@ import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output
 import {Column} from './ngst-model';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {NewRowDialogComponent} from '../new-row-dialog/new-row-dialog.component';
-import {isNullOrUndefined} from "util";
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'ngst-table',
@@ -16,10 +16,12 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() canDelete: boolean;
   @Input() canEdit: boolean;
   @Input() canCreate: boolean;
+  @Input() canClick: boolean;
 
   @Output() rowChanged: EventEmitter<RowChangedEvent> = new EventEmitter();
   @Output() rowDeleted: EventEmitter<any> = new EventEmitter();
   @Output() rowAdded: EventEmitter<any> = new EventEmitter();
+  @Output() rowClicked: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -69,12 +71,18 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   isEmpty(value: any) {
-    return isNullOrUndefined(value);
+    return isNullOrUndefined(value) || value === '';
   }
 
-  click(rowData: any, column: Column) {
+  clickCell(rowData: any, column: Column) {
     this.editRow = rowData;
     this.editColumn = column;
+  }
+
+  clickRow(row: any) {
+    if (this.canClick) {
+      this.rowClicked.emit(row);
+    }
   }
 
   changeRow(row: any, column: Column, newValue: any) {

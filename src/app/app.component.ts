@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Column, DigitsOfPrecisionFormatter, PercentFormatter} from './ngst/table/ngst-model';
+import {Column, DigitsOfPrecisionFormatter, IntegerFormatter, PercentFormatter} from './ngst/table/ngst-model';
 import {EditorComponent} from './ngst/editor/editor.component';
 import {RowChangedEvent} from './ngst/table/table.component';
 
@@ -25,6 +25,7 @@ export class AppComponent {
 
     const column3 = new Column('Integer', 'integer');
     column3.editor = EditorComponent;
+    column3.formatter = new IntegerFormatter();
 
     const column4 = new Column('Float', 'float');
     column4.editor = EditorComponent;
@@ -60,6 +61,10 @@ export class AppComponent {
   add(row: Thing) {
     this.rowData.push(row);
     this.rowData = [...this.rowData];
+  }
+
+  click(row: Thing) {
+    console.log(row);
   }
 }
 

@@ -1,5 +1,6 @@
 <mat-form-field [class.ngst-full-width]="fullWidth">
   <input matInput
+         ngstStopPropogation
          [placeholder]="showPlaceholder ? column.label: ''"
          [(ngModel)]="value"
          (change)="changed()">
