@@ -15,6 +15,12 @@ NgST is currently in the very early stages of development, and better documentat
 * Item filters 
 
 
+#### Demo an contribution
+If you are interested in seeing a demo or becoming a contributor hit us up on Github: [ConvergysLabs/ngst](https://github.com/ConvergysLabs/ngst)
+
+The demo is not currently hosted anywhere (womp womp).
+
+
 ## Including NgST in your application
 
 Add the dependency in your `package.json`
