@@ -13,11 +13,12 @@ export class AppComponent {
   rowData: Array<Thing> = [];
 
   constructor() {
-    // Generate some sample data
+    /* Generate some sample data */
     for (let i = 0; i < 1000; i++) {
       this.rowData.push(new Thing('Thing ' + i, 'No Edit ' + i, i, i / 29, i / 29));
     }
 
+    /* Create column definitions */
     const column1 = new Column('Label', 'label');
     column1.editor = EditorComponent;
 

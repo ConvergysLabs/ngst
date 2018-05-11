@@ -1,17 +1,40 @@
-# Ngst
+# NgST Demo Application
 
-Angular structured table. 
+This repository contains the code to develop, test, demo, and distribute NGST.
+
+If you wish to include NGST in your Angular application please see the [module's readme](./src/app/ngst/README.md).
+
+![Table image](./doc/ngst-demo.png)
 
 
-### Build lib
+## Running the Demo/Development
+
+#### Install dependencies
+```bash
+yarn
+```
+
+#### Run the demo
+```bash
+yarn start
+```
+
+## Building and publishing new versions of the lib to NPM
+#### Increment the version number
+In `src/app/ngst/package.json` increment `"version"`/
+
+#### Build NGST lib
 ```bash
 npm run build:lib
 ```
 
+#### Pack
 ```bash
 npm pack dist
 ```
 
+#### Distribute
+You will need to have npm permissions and be logged in. Your terminal will prompt you for creds.
 ```bash
 npm publish dist
 ```
