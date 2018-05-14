@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditorContainerComponent } from './editor-container.component';
+import { StringInputComponent } from './string-input.component';
 
-describe('EditorContainerComponent', () => {
-  let component: EditorContainerComponent;
-  let fixture: ComponentFixture<EditorContainerComponent>;
+describe('StringInputComponent', () => {
+  let component: StringInputComponent;
+  let fixture: ComponentFixture<StringInputComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditorContainerComponent ]
+      declarations: [ StringInputComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorContainerComponent);
+    fixture = TestBed.createComponent(StringInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

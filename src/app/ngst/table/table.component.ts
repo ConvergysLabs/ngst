@@ -86,7 +86,14 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   changeRow(row: any, column: Column, newValue: any) {
-    this.rowChanged.emit(new RowChangedEvent(row, column, newValue));
+    // Clone the user's data
+    const clone = Object.assign({}, ...row);
+
+    // Mutate the clone
+    column.editor.edit(clone, column, newValue);
+
+    // Let the user know that a change has occurred
+    this.rowChanged.emit(new RowChangedEvent(row, clone, column, newValue));
   }
 
   deleteRow(row: any) {
@@ -108,6 +115,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 }
 
 export class RowChangedEvent {
-  constructor(public row: any, public column: Column, public newValue: any) {
+  constructor(public row: any, public clonedRow, public column: Column, public newValue: any) {
   }
 }

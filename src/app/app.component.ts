@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {Column, DigitsOfPrecisionFormatter, IntegerFormatter, PercentFormatter} from './ngst/table/ngst-model';
-import {EditorComponent} from './ngst/editor/editor.component';
+import {Column, DigitsOfPrecisionFormatter, Editor, IntegerFormatter, PercentFormatter} from './ngst/table/ngst-model';
+import {StringInputComponent} from './ngst/inputs/string-input/string-input.component';
 import {RowChangedEvent} from './ngst/table/table.component';
 
 @Component({
@@ -20,20 +20,18 @@ export class AppComponent {
 
     /* Create column definitions */
     const column1 = new Column('Label', 'label');
-    column1.editor = EditorComponent;
 
     const column2 = new Column('No Edit', 'noedit');
+    column2.editable = false;
 
     const column3 = new Column('Integer', 'integer');
-    column3.editor = EditorComponent;
     column3.formatter = new IntegerFormatter();
+    column3.editor = new LinkedEditor();
 
     const column4 = new Column('Float', 'float');
-    column4.editor = EditorComponent;
     column4.formatter = new DigitsOfPrecisionFormatter(2);
 
     const column5 = new Column('Percent', 'percent');
-    column5.editor = EditorComponent;
     column5.formatter = new PercentFormatter(2);
 
     this.columns.push(column1);
@@ -45,7 +43,8 @@ export class AppComponent {
 
   change(rce: RowChangedEvent) {
     // Usually a Store of some sort or an API call would be made here.
-    rce.row[rce.column.accessor] = rce.newValue;
+    // For demo we simply replace original with clone.
+    Object.assign(rce.row, rce.clonedRow);
 
     // Kick off ng changes
     this.rowData = [...this.rowData];
@@ -75,5 +74,12 @@ class Thing {
               public integer: number,
               public float: number,
               public percent: number) {
+  }
+}
+
+class LinkedEditor implements Editor {
+  edit(row: Thing, column: Column, value: any) {
+    row[column.accessor] = value;
+    row.noedit = 'No Edit: ' + value;
   }
 }

@@ -1,8 +1,11 @@
 import {Type} from '@angular/core';
+import {StringInputComponent} from '../inputs/string-input/string-input.component';
 
 export class Column {
   public formatter: Formatter = new StringFormatter();
-  public editor?: Type<{}>;
+  public editor: Editor = new StringEditor();
+  public input: Type<{}> = StringInputComponent;
+  public editable: boolean = true;
 
   constructor(public label: string,
               public accessor: string) {
@@ -76,5 +79,15 @@ export class PercentFormatter extends DigitsOfPrecisionFormatter {
       return null;
     }
     return f;
+  }
+}
+
+export interface Editor {
+  edit(row: any, column: Column, value: any);
+}
+
+export class StringEditor implements Editor {
+  edit(row: any, column: Column, value: any) {
+    row[column.accessor] = value;
   }
 }

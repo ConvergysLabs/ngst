@@ -1,3 +1,3 @@
 export * from './ngst.module';
-export {EditorComponent} from './editor/editor.component';
+export {StringInputComponent} from './inputs/string-input/string-input.component';
 export * from './table/ngst-model';

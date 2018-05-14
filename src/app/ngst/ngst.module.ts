@@ -12,8 +12,8 @@ import {
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule} from '@angular/platform-browser';
 import {PolymorphicContainerDirective} from './directives/polymorphic-container.directive';
-import {EditorComponent} from './editor/editor.component';
-import {EditorContainerComponent} from './editor-container/editor-container.component';
+import {StringInputComponent} from './inputs/string-input/string-input.component';
+import {InputContainerComponent} from './inputs/input-container/input-container.component';
 import {FormsModule} from '@angular/forms';
 import {NewRowDialogComponent} from './new-row-dialog/new-row-dialog.component';
 import {StopPropogationDirective} from './directives/stop-propogation.directive';
@@ -36,17 +36,17 @@ import {StopPropogationDirective} from './directives/stop-propogation.directive'
   declarations: [
     TableComponent,
     PolymorphicContainerDirective,
-    EditorComponent,
-    EditorContainerComponent,
+    StringInputComponent,
+    InputContainerComponent,
     NewRowDialogComponent,
     StopPropogationDirective
   ],
   exports: [
     TableComponent,
-    EditorComponent
+    StringInputComponent
   ],
   entryComponents: [
-    EditorComponent,
+    StringInputComponent,
     NewRowDialogComponent
   ]
 })
