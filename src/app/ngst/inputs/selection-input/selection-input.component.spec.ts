@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StringInputComponent } from './string-input.component';
+import { SelectionInputComponent } from './selection-input.component';
 
-describe('StringInputComponent', () => {
-  let component: StringInputComponent;
-  let fixture: ComponentFixture<StringInputComponent>;
+describe('SelectionInputComponent', () => {
+  let component: SelectionInputComponent;
+  let fixture: ComponentFixture<SelectionInputComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StringInputComponent ]
+      declarations: [ SelectionInputComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StringInputComponent);
+    fixture = TestBed.createComponent(SelectionInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

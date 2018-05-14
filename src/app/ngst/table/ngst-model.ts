@@ -1,10 +1,10 @@
 import {Type} from '@angular/core';
-import {StringInputComponent} from '../inputs/string-input/string-input.component';
+import {RawInputComponent} from '../inputs/raw-input/raw-input.component';
 
 export class Column {
   public formatter: Formatter = new StringFormatter();
   public editor: Editor = new StringEditor();
-  public input: Type<{}> = StringInputComponent;
+  public input: Type<{}> = RawInputComponent;
   public editable: boolean = true;
 
   constructor(public label: string,
@@ -82,6 +82,18 @@ export class PercentFormatter extends DigitsOfPrecisionFormatter {
   }
 }
 
+export class SelectionFormatter implements Formatter {
+  public selectionMap: SelectionMap = new SelectionMap();
+
+  format(rowData: any, column: Column): string {
+    return this.selectionMap.aliasOf(rowData[column.accessor]);
+  }
+
+  parse(value: string): string | number {
+    return value;
+  }
+}
+
 export interface Editor {
   edit(row: any, column: Column, value: any);
 }
@@ -89,5 +101,42 @@ export interface Editor {
 export class StringEditor implements Editor {
   edit(row: any, column: Column, value: any) {
     row[column.accessor] = value;
+  }
+}
+
+
+export class SelectorItem {
+  constructor(public description: string, public value: string | number) {
+
+  }
+}
+
+export class SelectionMap {
+  private map: { [alias: string]: SelectorItem } = {};
+
+  public put(alias: string, item: SelectorItem) {
+    this.map[alias] = item;
+  }
+
+  public options(): string[] {
+    return Object.keys(this.map);
+  }
+
+  public valueOf(alias: string) {
+    return this.map[alias].value;
+  }
+
+  public descriptionOf(alias: string) {
+    return this.map[alias].description;
+  }
+
+  public aliasOf(value: string) {
+    for (const alias of this.options()) {
+      if (this.map[alias].value === value) {
+        return alias;
+      }
+    }
+
+    return value;
   }
 }

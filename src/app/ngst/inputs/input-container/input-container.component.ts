@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import {PolymorphicContainerDirective} from '../../directives/polymorphic-container.directive';
 import {Column} from '../../table/ngst-model';
-import {StringInputComponent} from '../string-input/string-input.component';
+import {RawInputComponent} from '../raw-input/raw-input.component';
 
 @Component({
   selector: 'ngst-input-container',
@@ -33,6 +33,6 @@ export class InputContainerComponent implements OnInit, OnChanges {
     containerRef.clear();
 
     const component = containerRef.createComponent(factory);
-    (<StringInputComponent>component.instance).init(this.item, this.column, this.showPlaceholder, this.fullWidth, this.changedEmitter);
+    (<RawInputComponent>component.instance).init(this.item, this.column, this.showPlaceholder, this.fullWidth, this.changedEmitter);
   }
 }

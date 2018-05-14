@@ -2,21 +2,26 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TableComponent} from './table/table.component';
 import {
-  MatButtonModule, MatFormFieldModule,
-  MatIconModule, MatInputModule,
+  MatButtonModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
   MatPaginatorModule,
+  MatSelectModule,
   MatSortModule,
   MatTableModule,
-  MatDialogModule
+  MatTooltipModule
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule} from '@angular/platform-browser';
 import {PolymorphicContainerDirective} from './directives/polymorphic-container.directive';
-import {StringInputComponent} from './inputs/string-input/string-input.component';
+import {RawInputComponent} from './inputs/raw-input/raw-input.component';
 import {InputContainerComponent} from './inputs/input-container/input-container.component';
 import {FormsModule} from '@angular/forms';
 import {NewRowDialogComponent} from './new-row-dialog/new-row-dialog.component';
 import {StopPropogationDirective} from './directives/stop-propogation.directive';
+import {SelectionInputComponent} from './inputs/selection-input/selection-input.component';
 
 @NgModule({
   imports: [
@@ -31,22 +36,26 @@ import {StopPropogationDirective} from './directives/stop-propogation.directive'
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule,
+    MatTooltipModule
   ],
   declarations: [
     TableComponent,
     PolymorphicContainerDirective,
-    StringInputComponent,
+    RawInputComponent,
+    SelectionInputComponent,
     InputContainerComponent,
     NewRowDialogComponent,
     StopPropogationDirective
   ],
   exports: [
     TableComponent,
-    StringInputComponent
+    RawInputComponent
   ],
   entryComponents: [
-    StringInputComponent,
+    RawInputComponent,
+    SelectionInputComponent,
     NewRowDialogComponent
   ]
 })

@@ -2,11 +2,11 @@ import {Component, EventEmitter} from '@angular/core';
 import {Column} from '../../table/ngst-model';
 
 @Component({
-  selector: 'ngst-string-input',
-  templateUrl: './string-input.component.html',
-  styleUrls: ['./string-input.component.css']
+  selector: 'ngst-raw-input',
+  templateUrl: './raw-input.component.html',
+  styleUrls: ['./raw-input.component.css']
 })
-export class StringInputComponent {
+export class RawInputComponent {
   public item: any;
   public column: Column;
   public showPlaceholder: boolean = false;

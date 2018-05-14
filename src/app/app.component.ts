@@ -1,7 +1,11 @@
 import {Component} from '@angular/core';
-import {Column, DigitsOfPrecisionFormatter, Editor, IntegerFormatter, PercentFormatter} from './ngst/table/ngst-model';
-import {StringInputComponent} from './ngst/inputs/string-input/string-input.component';
+import {
+  Column, DigitsOfPrecisionFormatter, Editor, IntegerFormatter, PercentFormatter,
+  SelectionFormatter, SelectorItem
+} from './ngst/table/ngst-model';
+import {RawInputComponent} from './ngst/inputs/raw-input/raw-input.component';
 import {RowChangedEvent} from './ngst/table/table.component';
+import {SelectionInputComponent} from './ngst/inputs/selection-input/selection-input.component';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +19,7 @@ export class AppComponent {
   constructor() {
     /* Generate some sample data */
     for (let i = 0; i < 1000; i++) {
-      this.rowData.push(new Thing('Thing ' + i, 'No Edit ' + i, i, i / 29, i / 29));
+      this.rowData.push(new Thing('Thing ' + i, 'No Edit ' + i, i, i / 29, i / 29, 0));
     }
 
     /* Create column definitions */
@@ -34,11 +38,16 @@ export class AppComponent {
     const column5 = new Column('Percent', 'percent');
     column5.formatter = new PercentFormatter(2);
 
+    const column6 = new Column('Options', 'option');
+    column6.formatter = new ThingSelectionFormatter();
+    column6.input = SelectionInputComponent;
+
     this.columns.push(column1);
     this.columns.push(column2);
     this.columns.push(column3);
     this.columns.push(column4);
     this.columns.push(column5);
+    this.columns.push(column6);
   }
 
   change(rce: RowChangedEvent) {
@@ -73,7 +82,8 @@ class Thing {
               public noedit: string,
               public integer: number,
               public float: number,
-              public percent: number) {
+              public percent: number,
+              public option: number) {
   }
 }
 
@@ -81,5 +91,15 @@ class LinkedEditor implements Editor {
   edit(row: Thing, column: Column, value: any) {
     row[column.accessor] = value;
     row.noedit = 'No Edit: ' + value;
+  }
+}
+
+class ThingSelectionFormatter extends SelectionFormatter {
+  constructor() {
+    super();
+
+    for (let i = 0; i < 5; i++) {
+      this.selectionMap.put('Option ' + i, new SelectorItem('Tooltip for option ' + i, i));
+    }
   }
 }

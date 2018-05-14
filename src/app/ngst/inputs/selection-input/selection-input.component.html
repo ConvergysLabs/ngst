@@ -1,0 +1,11 @@
+<mat-form-field [class.ngst-full-width]="fullWidth">
+  <mat-select ngstStopPropogation
+              [placeholder]="showPlaceholder ? column.label: ''"
+              [(ngModel)]="value"
+              (change)="changed()">
+    <mat-option *ngFor="let alias of selectionMap.options()"
+                [value]="selectionMap.valueOf(alias)">
+      <span [matTooltip]="selectionMap.descriptionOf(alias)">{{alias}}</span>
+    </mat-option>
+  </mat-select>
+</mat-form-field>
