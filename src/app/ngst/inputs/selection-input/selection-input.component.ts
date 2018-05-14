@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {RawInputComponent} from '../raw-input/raw-input.component';
-import {SelectionFormatter} from '../../table/ngst-model';
+import {SelectionFormatter, SelectionMap} from '../../table/ngst-model';
 
 @Component({
   selector: 'ngst-selection-input',
@@ -8,7 +8,7 @@ import {SelectionFormatter} from '../../table/ngst-model';
   styleUrls: ['./selection-input.component.css']
 })
 export class SelectionInputComponent extends RawInputComponent {
-  get selectionMap() {
+  get map(): SelectionMap {
     const formatter = <SelectionFormatter>this.column.formatter;
     return formatter.selectionMap;
   }
