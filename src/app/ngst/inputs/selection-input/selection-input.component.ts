@@ -12,9 +12,4 @@ export class SelectionInputComponent extends RawInputComponent {
     const formatter = <SelectionFormatter>this.column.formatter;
     return formatter.selectionMap;
   }
-
-  changed() {
-    console.log(this.value);
-    super.changed();
-  }
 }

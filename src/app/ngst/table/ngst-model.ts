@@ -86,7 +86,17 @@ export class SelectionFormatter implements Formatter {
   public selectionMap: SelectionMap = new SelectionMap();
 
   format(rowData: any, column: Column): string {
-    return this.selectionMap.aliasOf(rowData[column.accessor]);
+    return this.selectionMap.aliasOf(column.getRowValue(rowData));
+  }
+
+  parse(value: string): string | number {
+    return value;
+  }
+}
+
+export class BooleanFormatter implements Formatter {
+  format(rowData: any, column: Column): string {
+    return column.getRowValue(rowData) ? 'True' : 'False';
   }
 
   parse(value: string): string | number {

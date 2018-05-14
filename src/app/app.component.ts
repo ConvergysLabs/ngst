@@ -1,11 +1,13 @@
 import {Component} from '@angular/core';
 import {
+  BooleanFormatter,
   Column, DigitsOfPrecisionFormatter, Editor, IntegerFormatter, PercentFormatter,
   SelectionFormatter, SelectorItem
 } from './ngst/table/ngst-model';
 import {RawInputComponent} from './ngst/inputs/raw-input/raw-input.component';
 import {RowChangedEvent} from './ngst/table/table.component';
 import {SelectionInputComponent} from './ngst/inputs/selection-input/selection-input.component';
+import {BooleanInputComponent} from './ngst/inputs/boolean-input/boolean-input.component';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +21,7 @@ export class AppComponent {
   constructor() {
     /* Generate some sample data */
     for (let i = 0; i < 1000; i++) {
-      this.rowData.push(new Thing('Thing ' + i, 'No Edit ' + i, i, i / 29, i / 29, 0));
+      this.rowData.push(new Thing('Thing ' + i, 'No Edit ' + i, i, i / 29, i / 29, 0, false));
     }
 
     /* Create column definitions */
@@ -42,12 +44,17 @@ export class AppComponent {
     column6.formatter = new ThingSelectionFormatter();
     column6.input = SelectionInputComponent;
 
+    const column7 = new Column('Boolean', 'boolean');
+    column7.formatter = new BooleanFormatter();
+    column7.input = BooleanInputComponent;
+
     this.columns.push(column1);
     this.columns.push(column2);
     this.columns.push(column3);
     this.columns.push(column4);
     this.columns.push(column5);
     this.columns.push(column6);
+    this.columns.push(column7);
   }
 
   change(rce: RowChangedEvent) {
@@ -83,7 +90,8 @@ class Thing {
               public integer: number,
               public float: number,
               public percent: number,
-              public option: number) {
+              public option: number,
+              public boolean: boolean) {
   }
 }
 

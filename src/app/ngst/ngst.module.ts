@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {TableComponent} from './table/table.component';
 import {
   MatButtonModule,
+  MatCheckboxModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
@@ -22,6 +23,7 @@ import {FormsModule} from '@angular/forms';
 import {NewRowDialogComponent} from './new-row-dialog/new-row-dialog.component';
 import {StopPropogationDirective} from './directives/stop-propogation.directive';
 import {SelectionInputComponent} from './inputs/selection-input/selection-input.component';
+import {BooleanInputComponent} from './inputs/boolean-input/boolean-input.component';
 
 @NgModule({
   imports: [
@@ -38,13 +40,15 @@ import {SelectionInputComponent} from './inputs/selection-input/selection-input.
     MatInputModule,
     MatDialogModule,
     MatSelectModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatCheckboxModule
   ],
   declarations: [
     TableComponent,
     PolymorphicContainerDirective,
     RawInputComponent,
     SelectionInputComponent,
+    BooleanInputComponent,
     InputContainerComponent,
     NewRowDialogComponent,
     StopPropogationDirective
@@ -56,6 +60,7 @@ import {SelectionInputComponent} from './inputs/selection-input/selection-input.
   entryComponents: [
     RawInputComponent,
     SelectionInputComponent,
+    BooleanInputComponent,
     NewRowDialogComponent
   ]
 })
