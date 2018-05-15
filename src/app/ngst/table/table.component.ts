@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {Column} from './ngst-model';
-import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatPaginator, MatSort, MatTableDataSource, PageEvent} from '@angular/material';
 import {NewRowDialogComponent} from '../new-row-dialog/new-row-dialog.component';
 import {isNullOrUndefined} from 'util';
 
@@ -25,11 +25,16 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  dataSource: MatTableDataSource<any> = new MatTableDataSource();
+  rawDataSource: MatTableDataSource<any> = new MatTableDataSource();
+  paginatedDataSource: MatTableDataSource<any> = new MatTableDataSource();
   columnIndexes: Array<string> = [];
 
   editRow: any;
   editColumn: Column;
+
+  pageSize: number = 10;
+  pageIndex: number = 0;
+  rows: number = 0;
 
   constructor(private dialog: MatDialog) {
   }
@@ -43,12 +48,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.sortAndPaginate();
   }
 
   updateTable() {
-    this.dataSource.data = this.rowData;
-    this.dataSource.sortingDataAccessor = (data: any, sortHeaderId: string): string | number => {
+    this.rawDataSource.data = this.rowData;
+    this.rawDataSource.sortingDataAccessor = (data: any, sortHeaderId: string): string | number => {
       // Get the column with the header id
       const column = this.columns.filter(c => c.label === sortHeaderId)[0];
       return column.getRowValue(data);
@@ -63,11 +67,27 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     // Reset editors
     this.editRow = null;
     this.editColumn = null;
+
+    this.rows = this.rowData.length;
+
+    this.doSort();
   }
 
-  sortAndPaginate() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+  doSort() {
+    this.rawDataSource.data = this.rawDataSource.sortData(this.rowData, this.sort);
+
+
+    const pe = new PageEvent();
+    pe.pageIndex = this.pageIndex;
+    pe.pageSize = this.pageSize;
+    this.paginate(pe);
+  }
+
+  paginate(page: PageEvent) {
+    this.pageIndex = page.pageIndex;
+    this.pageSize = page.pageSize;
+    const r0 = page.pageIndex * page.pageSize;
+    this.paginatedDataSource.data = this.rawDataSource.data.slice(r0, r0 + page.pageSize);
   }
 
   isEmpty(value: any) {

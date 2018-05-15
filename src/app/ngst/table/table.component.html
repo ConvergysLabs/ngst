@@ -12,7 +12,7 @@
   </div>
 
   <!--Table-->
-  <mat-table #table [dataSource]="dataSource" matSort>
+  <mat-table #table [dataSource]="paginatedDataSource" matSort (matSortChange)="doSort()">
     <!--Actions-->
     <ng-container matColumnDef="ngst-actions" *ngIf="canDelete">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -70,8 +70,11 @@
 
   <!--Paginator-->
   <mat-paginator #paginator
-                 [pageSize]="5"
+                 [pageIndex]="pageIndex"
+                 [pageSize]="pageSize"
+                 [length]="rows"
                  [pageSizeOptions]="[5, 10, 25, 100]"
-                 [showFirstLastButtons]="true">
+                 [showFirstLastButtons]="true"
+                 (page)="paginate($event)">
   </mat-paginator>
 </div>

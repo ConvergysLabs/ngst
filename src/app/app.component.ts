@@ -20,7 +20,7 @@ export class AppComponent {
 
   constructor() {
     /* Generate some sample data */
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 10000; i++) {
       this.rowData.push(new Thing('Thing ' + i, 'No Edit ' + i, i, i / 29, i / 29, 0, false));
     }
 
