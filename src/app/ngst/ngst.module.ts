@@ -55,7 +55,9 @@ import {BooleanInputComponent} from './inputs/boolean-input/boolean-input.compon
   ],
   exports: [
     TableComponent,
-    RawInputComponent
+    RawInputComponent,
+    SelectionInputComponent,
+    BooleanInputComponent,
   ],
   entryComponents: [
     RawInputComponent,

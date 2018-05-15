@@ -1,7 +1,7 @@
 {
   "$schema": "../../../node_modules/ng-packagr/package.schema.json",
   "name": "ngst",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "license": "MIT",
   "private": false,
   "peerDependencies": {
