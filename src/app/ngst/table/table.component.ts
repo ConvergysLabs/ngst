@@ -132,6 +132,10 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
       }
     });
   }
+
+  columnLabel(column: Column) {
+    return 'ngst-' + column.accessor;
+  }
 }
 
 export class RowChangedEvent {

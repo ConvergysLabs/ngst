@@ -46,18 +46,18 @@
           <!--Not editable-->
           <span *ngIf="!isEmpty(column.getRowValue(row)) && !column.editable || !canEdit"
                 [class.ngst-clickable]="canClick"
-                class="ngst-not-editable">{{column.formatValue(row)}}</span>
+                class="ngst-not-editable {{columnLabel(column)}}">{{column.formatValue(row)}}</span>
           <span *ngIf="isEmpty(column.getRowValue(row)) && (!column.editable || !canEdit)"
                 [class.ngst-clickable]="canClick"
-                class="ngst-not-editable ngst-empty">empty</span>
+                class="ngst-not-editable ngst-empty {{columnLabel(column)}}">empty</span>
 
           <!--Editable-->
           <span *ngIf="!isEmpty(column.getRowValue(row)) && column.editable && canEdit"
                 (click)="clickCell(row, column)" ngstStopPropogation
-                class="ngst-editable">{{column.formatValue(row)}}</span>
+                class="ngst-editable {{columnLabel(column)}}">{{column.formatValue(row)}}</span>
           <span *ngIf="isEmpty(column.getRowValue(row)) && column.editable && canEdit"
                 (click)="clickCell(row, column)" ngstStopPropogation
-                class="ngst-editable ngst-empty">empty</span>
+                class="ngst-editable ngst-empty {{columnLabel(column)}}">empty</span>
         </ng-container>
       </mat-cell>
     </ng-container>
