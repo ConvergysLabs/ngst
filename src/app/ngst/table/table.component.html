@@ -44,20 +44,24 @@
         <!--Display-->
         <ng-container *ngIf="row != editRow || column != editColumn || !column.editable || !canEdit">
           <!--Not editable-->
-          <span *ngIf="!isEmpty(column.getRowValue(row)) && !column.editable || !canEdit"
-                [class.ngst-clickable]="canClick"
-                class="ngst-not-editable {{columnLabel(column)}}">{{column.formatValue(row)}}</span>
-          <span *ngIf="isEmpty(column.getRowValue(row)) && (!column.editable || !canEdit)"
-                [class.ngst-clickable]="canClick"
-                class="ngst-not-editable ngst-empty {{columnLabel(column)}}">empty</span>
+          <div *ngIf="!isEmpty(column.getRowValue(row)) && !column.editable || !canEdit"
+               [class.ngst-clickable]="canClick"
+               class="ngst-not-editable {{columnLabel(column)}}"
+               [innerHTML]="column.formatValue(row)"></div>
+          <div *ngIf="isEmpty(column.getRowValue(row)) && (!column.editable || !canEdit)"
+               [class.ngst-clickable]="canClick"
+               class="ngst-not-editable ngst-empty {{columnLabel(column)}}">empty
+          </div>
 
           <!--Editable-->
-          <span *ngIf="!isEmpty(column.getRowValue(row)) && column.editable && canEdit"
-                (click)="clickCell(row, column)" ngstStopPropogation
-                class="ngst-editable {{columnLabel(column)}}">{{column.formatValue(row)}}</span>
-          <span *ngIf="isEmpty(column.getRowValue(row)) && column.editable && canEdit"
-                (click)="clickCell(row, column)" ngstStopPropogation
-                class="ngst-editable ngst-empty {{columnLabel(column)}}">empty</span>
+          <div *ngIf="!isEmpty(column.getRowValue(row)) && column.editable && canEdit"
+               (click)="clickCell(row, column)" ngstStopPropogation
+               class="ngst-editable {{columnLabel(column)}}"
+               [innerHTML]="column.formatValue(row)"></div>
+          <div *ngIf="isEmpty(column.getRowValue(row)) && column.editable && canEdit"
+               (click)="clickCell(row, column)" ngstStopPropogation
+               class="ngst-editable ngst-empty {{columnLabel(column)}}">empty
+          </div>
         </ng-container>
       </mat-cell>
     </ng-container>
