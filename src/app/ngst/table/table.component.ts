@@ -69,7 +69,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     this.editColumn = null;
 
     this.rows = this.rowData.length;
-
+    this.pageIndex = 0;
+    
     this.doSort();
   }
 
