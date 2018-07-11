@@ -2,7 +2,7 @@
   <mat-select ngstStopPropogation
               [placeholder]="showPlaceholder ? column.label: ''"
               [(ngModel)]="value"
-              (change)="changed()">
+              (selectionChange)="changed()">
     <mat-option *ngFor="let alias of map.options()"
                 [value]="map.valueOf(alias)">
       <span [matTooltip]="map.descriptionOf(alias)">{{alias}}</span>

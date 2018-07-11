@@ -20,8 +20,9 @@ export class AppComponent {
 
   constructor() {
     /* Generate some sample data */
-    for (let i = 0; i < 10000; i++) {
-      this.rowData.push(new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i, i / 29, i / 29, 0, false));
+    const n = 1000;
+    for (let i = 0; i < n; i++) {
+      this.rowData.push(new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i - n / 2, i / 29, i / 29, 0, false));
     }
 
     /* Create column definitions */
