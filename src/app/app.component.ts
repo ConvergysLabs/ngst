@@ -8,6 +8,7 @@ import {RawInputComponent} from './ngst/inputs/raw-input/raw-input.component';
 import {RowChangedEvent} from './ngst/table/table.component';
 import {SelectionInputComponent} from './ngst/inputs/selection-input/selection-input.component';
 import {BooleanInputComponent} from './ngst/inputs/boolean-input/boolean-input.component';
+import {TextAreaInputComponent} from './ngst/inputs/raw-input/text-area-input.component';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,7 @@ export class AppComponent {
     /* Generate some sample data */
     const n = 1000;
     for (let i = 0; i < n; i++) {
-      this.rowData.push(new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i - n / 2, i / 29, i / 29, 0, false));
+      this.rowData.push(new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i - n / 2, i / 29, i / 29, 0, false, 'Long text goes here!'));
     }
 
     /* Create column definitions */
@@ -49,6 +50,9 @@ export class AppComponent {
     column7.formatter = new BooleanFormatter();
     column7.input = BooleanInputComponent;
 
+    const column8 = new Column('Text Area', 'textarea');
+    column8.input = TextAreaInputComponent;
+
     this.columns.push(column1);
     this.columns.push(column2);
     this.columns.push(column3);
@@ -56,6 +60,7 @@ export class AppComponent {
     this.columns.push(column5);
     this.columns.push(column6);
     this.columns.push(column7);
+    this.columns.push(column8);
   }
 
   change(rce: RowChangedEvent) {
@@ -92,7 +97,8 @@ class Thing {
               public float: number,
               public percent: number,
               public option: number,
-              public boolean: boolean) {
+              public boolean: boolean,
+              public textarea: string) {
   }
 }
 

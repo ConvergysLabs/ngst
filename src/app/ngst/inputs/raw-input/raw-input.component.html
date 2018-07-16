@@ -1,7 +1,14 @@
 <mat-form-field [class.ngst-full-width]="fullWidth">
-  <input matInput
+  <input *ngIf="type === TYPE_INPUT"
+         matInput
          ngstStopPropogation
          [placeholder]="showPlaceholder ? column.label: ''"
          [(ngModel)]="value"
          (change)="changed()">
+  <textarea *ngIf="type === TYPE_TEXT_AREA"
+            matInput
+            ngstStopPropogation
+            [placeholder]="showPlaceholder ? column.label: ''"
+            [(ngModel)]="value"
+            (change)="changed()"></textarea>
 </mat-form-field>

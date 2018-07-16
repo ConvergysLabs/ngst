@@ -24,6 +24,7 @@ import {NewRowDialogComponent} from './new-row-dialog/new-row-dialog.component';
 import {StopPropogationDirective} from './directives/stop-propogation.directive';
 import {SelectionInputComponent} from './inputs/selection-input/selection-input.component';
 import {BooleanInputComponent} from './inputs/boolean-input/boolean-input.component';
+import {TextAreaInputComponent} from './inputs/raw-input/text-area-input.component';
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import {BooleanInputComponent} from './inputs/boolean-input/boolean-input.compon
     TableComponent,
     PolymorphicContainerDirective,
     RawInputComponent,
+    TextAreaInputComponent,
     SelectionInputComponent,
     BooleanInputComponent,
     InputContainerComponent,
@@ -56,11 +58,13 @@ import {BooleanInputComponent} from './inputs/boolean-input/boolean-input.compon
   exports: [
     TableComponent,
     RawInputComponent,
+    TextAreaInputComponent,
     SelectionInputComponent,
     BooleanInputComponent,
   ],
   entryComponents: [
     RawInputComponent,
+    TextAreaInputComponent,
     SelectionInputComponent,
     BooleanInputComponent,
     NewRowDialogComponent
