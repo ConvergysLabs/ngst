@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {
   BooleanFormatter,
   Column, DigitsOfPrecisionFormatter, Editor, IntegerFormatter, PercentFormatter,
-  SelectionFormatter, SelectorItem
+  SelectionFormatter, SelectorItem, Action
 } from './ngst/table/ngst-model';
 import {RawInputComponent} from './ngst/inputs/raw-input/raw-input.component';
 import {RowChangedEvent} from './ngst/table/table.component';
@@ -18,12 +18,21 @@ import {TextAreaInputComponent} from './ngst/inputs/raw-input/text-area-input.co
 export class AppComponent {
   columns: Array<Column> = [];
   rowData: Array<Thing> = [];
+  actions: Array<Action> = [];
 
   constructor() {
+    // Set Actions Column
+    const action1 = new Action('delete', 'delete', 'warn');
+    const action2 = new Action('play', 'play_arrow', 'basic');
+
+    this.actions.push(action1);
+    this.actions.push(action2);
+
     /* Generate some sample data */
     const n = 1000;
     for (let i = 0; i < n; i++) {
-      this.rowData.push(new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i - n / 2, i / 29, i / 29, 0, false, 'Long text goes here!'));
+      this.rowData.push(
+        new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i - n / 2, i / 29, i / 29, 0, false, 'Long text goes here!'));
     }
 
     /* Create column definitions */
@@ -78,6 +87,13 @@ export class AppComponent {
 
     // Kick off ng changes
     this.rowData = [...this.rowData];
+    console.log('it works!');
+  }
+
+  play(row: Thing) {
+    // WIP
+    console.log('play row');
+    return row;
   }
 
   add(row: Thing) {

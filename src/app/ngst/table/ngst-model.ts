@@ -150,3 +150,10 @@ export class SelectionMap {
     return value;
   }
 }
+
+export class Action {
+  constructor(public name: string,
+              public icon: string,
+              public iconColor: string) {
+}
+}
