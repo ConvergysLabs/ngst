@@ -22,11 +22,14 @@ export class AppComponent {
 
   constructor() {
     // Set Actions Column
-    const action1 = new Action('delete', 'delete', 'warn');
-    const action2 = new Action('play', 'play_arrow', 'basic');
+
+    const action1 = new Action('play', 'play_arrow');
+    const action2 = new Action('configure', 'build');
+    const action3 = new Action('red', 'favorite');
 
     this.actions.push(action1);
     this.actions.push(action2);
+    this.actions.push(action3);
 
     /* Generate some sample data */
     const n = 1000;
@@ -103,6 +106,10 @@ export class AppComponent {
 
   click(row: Thing) {
     console.log(row);
+  }
+
+  action(action: any) {
+    console.log(action);
   }
 }
 

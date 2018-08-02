@@ -17,12 +17,11 @@
     <ng-container matColumnDef="ngst-actions" *ngIf="showActions">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <button mat-button
+        <button mat-icon-button
                 ngstStopPropogation
-                *ngFor="let action of actions"
-                (click)="action.name(row)"
-                class="ngst-small-button"
-                color="action.iconColor">
+                *ngFor="let action of combinedActions"
+                (click)="runAction(action, row)"
+                [ngClass]="'ngst-action-' + action.name">
           <mat-icon>{{action.icon}}</mat-icon>
         </button>
       </mat-cell>

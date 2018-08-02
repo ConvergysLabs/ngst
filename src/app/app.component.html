@@ -3,12 +3,12 @@
             [rowData]="rowData"
             [actions]="actions"
             [canDelete]="true"
-            [canRun]="true"
             [canCreate]="true"
             [canEdit]="true"
             [canClick]="true"
             (rowChanged)="change($event)"
             (rowDeleted)="delete($event)"
             (rowAdded)="add($event)"
-            (rowClicked)="click($event)">
+            (rowClicked)="click($event)"
+            (rowAction)="action($event)">
 </ngst-table>

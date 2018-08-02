@@ -153,7 +153,6 @@ export class SelectionMap {
 
 export class Action {
   constructor(public name: string,
-              public icon: string,
-              public iconColor: string) {
-}
+              public icon: string) {
+  }
 }

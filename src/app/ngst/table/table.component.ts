@@ -13,25 +13,26 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() title: string;
   @Input() columns: Array<Column> = [];
   @Input() rowData: Array<any> = [];
-  @Input() actions: Array<Action> = [];
+  @Input() actions: Array<Action> = []; // User input actions
   @Input() canDelete: boolean;
   @Input() canEdit: boolean;
   @Input() canCreate: boolean;
   @Input() canClick: boolean;
-  @Input() canRun: boolean;
 
   @Output() rowChanged: EventEmitter<RowChangedEvent> = new EventEmitter();
   @Output() rowDeleted: EventEmitter<any> = new EventEmitter();
   @Output() rowAdded: EventEmitter<any> = new EventEmitter();
   @Output() rowClicked: EventEmitter<any> = new EventEmitter();
-  @Output() rowRun: EventEmitter<any> = new EventEmitter();
-  @Output() runActions: EventEmitter<any> = new EventEmitter();
+  @Output() rowAction: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   rawDataSource: MatTableDataSource<any> = new MatTableDataSource();
   paginatedDataSource: MatTableDataSource<any> = new MatTableDataSource();
   columnIndexes: Array<string> = [];
+
+  combinedActions: Array<Action> = [];
+  deletAction: Action = new Action('delete', 'delete');
 
   editRow: any;
   editColumn: Column;
@@ -79,10 +80,22 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   setActionColumn() {
-    if (this.actions.length > 0) {
+    // Reset
+    this.combinedActions = [];
+
+    // Always add delete first, if they want it
+    if (this.canDelete) {
+      this.combinedActions.push(this.deletAction);
+    }
+
+    // Then add user custom actions
+    this.combinedActions.push(...this.actions);
+
+    // Show actions column?
+    if (this.combinedActions.length > 0) {
       this.showActions = true;
       this.columnIndexes.push('ngst-actions');
-      console.log(this.actions);
+      console.log(this.combinedActions);
     }
   }
 
@@ -133,13 +146,15 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     this.rowDeleted.emit(row);
   }
 
-  runRow(row: any) {
-    this.rowRun.emit(row);
-  }
-
-  runAction(row: any) {
-    this.runActions.emit(row);
-    console.log(row);
+  runAction(action: Action, row: any) {
+    if (action === this.deletAction) {
+      this.deleteRow(row);
+    } else {
+      this.rowAction.emit({
+        action: action,
+        row: row
+      });
+    }
   }
 
   addRow() {
