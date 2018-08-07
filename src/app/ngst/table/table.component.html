@@ -14,15 +14,15 @@
   <!--Table-->
   <mat-table #table [dataSource]="paginatedDataSource" matSort (matSortChange)="doSort()">
     <!--Actions-->
-    <ng-container matColumnDef="ngst-actions" *ngIf="canDelete">
+    <ng-container matColumnDef="ngst-actions" *ngIf="showActions">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <button mat-button
+        <button mat-icon-button
                 ngstStopPropogation
-                (click)="deleteRow(row)"
-                class="ngst-small-button"
-                color="warn">
-          <mat-icon>delete</mat-icon>
+                *ngFor="let action of combinedActions"
+                (click)="runAction(action, row)"
+                [ngClass]="'ngst-action-' + action.name">
+          <mat-icon>{{action.icon}}</mat-icon>
         </button>
       </mat-cell>
     </ng-container>

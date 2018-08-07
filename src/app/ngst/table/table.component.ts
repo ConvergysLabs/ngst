@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
-import {Column} from './ngst-model';
+import {Column, Action} from './ngst-model';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource, PageEvent} from '@angular/material';
 import {NewRowDialogComponent} from '../new-row-dialog/new-row-dialog.component';
 import {isNullOrUndefined} from 'util';
@@ -13,6 +13,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() title: string;
   @Input() columns: Array<Column> = [];
   @Input() rowData: Array<any> = [];
+  @Input() actions: Array<Action> = []; // User input actions
   @Input() canDelete: boolean;
   @Input() canEdit: boolean;
   @Input() canCreate: boolean;
@@ -22,6 +23,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() rowDeleted: EventEmitter<any> = new EventEmitter();
   @Output() rowAdded: EventEmitter<any> = new EventEmitter();
   @Output() rowClicked: EventEmitter<any> = new EventEmitter();
+  @Output() rowAction: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -29,8 +31,12 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   paginatedDataSource: MatTableDataSource<any> = new MatTableDataSource();
   columnIndexes: Array<string> = [];
 
+  combinedActions: Array<Action> = [];
+  deletAction: Action = new Action('delete', 'delete');
+
   editRow: any;
   editColumn: Column;
+  showActions: boolean;
 
   pageSize: number = 10;
   pageIndex: number = 0;
@@ -59,9 +65,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     };
 
     this.columnIndexes = [];
-    if (this.canDelete) {
-      this.columnIndexes.push('ngst-actions');
-    }
+
+    this.setActionColumn();
+
     this.columnIndexes.push(...this.columns.map(c => c.label));
 
     // Reset editors
@@ -70,8 +76,27 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
     this.rows = this.rowData.length;
     this.pageIndex = 0;
-    
     this.doSort();
+  }
+
+  setActionColumn() {
+    // Reset
+    this.combinedActions = [];
+
+    // Always add delete first, if they want it
+    if (this.canDelete) {
+      this.combinedActions.push(this.deletAction);
+    }
+
+    // Then add user custom actions
+    this.combinedActions.push(...this.actions);
+
+    // Show actions column?
+    if (this.combinedActions.length > 0) {
+      this.showActions = true;
+      this.columnIndexes.push('ngst-actions');
+      console.log(this.combinedActions);
+    }
   }
 
   doSort() {
@@ -119,6 +144,17 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
   deleteRow(row: any) {
     this.rowDeleted.emit(row);
+  }
+
+  runAction(action: Action, row: any) {
+    if (action === this.deletAction) {
+      this.deleteRow(row);
+    } else {
+      this.rowAction.emit({
+        action: action,
+        row: row
+      });
+    }
   }
 
   addRow() {

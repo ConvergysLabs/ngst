@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {
   BooleanFormatter,
   Column, DigitsOfPrecisionFormatter, Editor, IntegerFormatter, PercentFormatter,
-  SelectionFormatter, SelectorItem
+  SelectionFormatter, SelectorItem, Action
 } from './ngst/table/ngst-model';
 import {RawInputComponent} from './ngst/inputs/raw-input/raw-input.component';
 import {RowChangedEvent} from './ngst/table/table.component';
@@ -18,12 +18,24 @@ import {TextAreaInputComponent} from './ngst/inputs/raw-input/text-area-input.co
 export class AppComponent {
   columns: Array<Column> = [];
   rowData: Array<Thing> = [];
+  actions: Array<Action> = [];
 
   constructor() {
+    // Set Actions Column
+
+    const action1 = new Action('play', 'play_arrow');
+    const action2 = new Action('configure', 'build');
+    const action3 = new Action('red', 'favorite');
+
+    this.actions.push(action1);
+    this.actions.push(action2);
+    this.actions.push(action3);
+
     /* Generate some sample data */
     const n = 1000;
     for (let i = 0; i < n; i++) {
-      this.rowData.push(new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i - n / 2, i / 29, i / 29, 0, false, 'Long text goes here!'));
+      this.rowData.push(
+        new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i - n / 2, i / 29, i / 29, 0, false, 'Long text goes here!'));
     }
 
     /* Create column definitions */
@@ -78,6 +90,13 @@ export class AppComponent {
 
     // Kick off ng changes
     this.rowData = [...this.rowData];
+    console.log('it works!');
+  }
+
+  play(row: Thing) {
+    // WIP
+    console.log('play row');
+    return row;
   }
 
   add(row: Thing) {
@@ -87,6 +106,10 @@ export class AppComponent {
 
   click(row: Thing) {
     console.log(row);
+  }
+
+  action(action: any) {
+    console.log(action);
   }
 }
 

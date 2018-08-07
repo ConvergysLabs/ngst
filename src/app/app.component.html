@@ -1,6 +1,7 @@
 <ngst-table title="My Table"
             [columns]="columns"
             [rowData]="rowData"
+            [actions]="actions"
             [canDelete]="true"
             [canCreate]="true"
             [canEdit]="true"
@@ -8,5 +9,6 @@
             (rowChanged)="change($event)"
             (rowDeleted)="delete($event)"
             (rowAdded)="add($event)"
-            (rowClicked)="click($event)">
+            (rowClicked)="click($event)"
+            (rowAction)="action($event)">
 </ngst-table>
