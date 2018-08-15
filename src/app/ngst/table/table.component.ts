@@ -58,6 +58,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
   updateTable() {
     this.rawDataSource.data = this.rowData;
+    console.log(this.rawDataSource.data);
     this.rawDataSource.sortingDataAccessor = (data: any, sortHeaderId: string): string | number => {
       // Get the column with the header id
       const column = this.columns.filter(c => c.label === sortHeaderId)[0];
@@ -95,7 +96,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.combinedActions.length > 0) {
       this.showActions = true;
       this.columnIndexes.push('ngst-actions');
-      console.log(this.combinedActions);
     }
   }
 
