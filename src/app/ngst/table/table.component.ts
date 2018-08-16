@@ -95,7 +95,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.combinedActions.length > 0) {
       this.showActions = true;
       this.columnIndexes.push('ngst-actions');
-      console.log(this.combinedActions);
     }
   }
 
