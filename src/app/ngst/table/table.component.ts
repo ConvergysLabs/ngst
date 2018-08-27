@@ -172,6 +172,15 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   columnLabel(column: Column) {
     return 'ngst-' + column.accessor;
   }
+
+  checkDisabled(row, action){
+    if(row.enabledActionNames){
+      if(row.enabledActionNames.includes(action.name)){
+        return false
+      }
+    }
+    return row.disabled
+  }
 }
 
 export class RowChangedEvent {
