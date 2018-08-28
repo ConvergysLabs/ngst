@@ -174,12 +174,10 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   checkDisabled(row, action){
-    if(row.enabledActionNames){
-      if(row.enabledActionNames.includes(action.name)){
-        return false
-      }
+    if(row.enabledActionNames && row.enabledActionNames.includes(action.name)){
+      return false;
     }
-    return row.disabled
+    return row.disabled;
   }
 }
 
