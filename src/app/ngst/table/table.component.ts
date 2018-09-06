@@ -14,6 +14,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() columns: Array<Column> = [];
   @Input() rowData: Array<any> = [];
   @Input() actions: Array<Action> = []; // User input actions
+  @Input() pageSize = 10;
   @Input() canDelete: boolean;
   @Input() canEdit: boolean;
   @Input() canCreate: boolean;
@@ -37,8 +38,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   editRow: any;
   editColumn: Column;
   showActions: boolean;
-
-  pageSize: number = 10;
   pageIndex: number = 0;
   rows: number = 0;
 
