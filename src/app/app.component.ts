@@ -9,6 +9,7 @@ import {RowChangedEvent} from './ngst/table/table.component';
 import {SelectionInputComponent} from './ngst/inputs/selection-input/selection-input.component';
 import {BooleanInputComponent} from './ngst/inputs/boolean-input/boolean-input.component';
 import {TextAreaInputComponent} from './ngst/inputs/raw-input/text-area-input.component';
+import {DemoComponent} from './demo/demo.component';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,10 @@ export class AppComponent {
   columns: Array<Column> = [];
   rowData: Array<Thing> = [];
   actions: Array<Action> = [];
+  demoComponent = {
+    component: DemoComponent,
+    data: {stuff: 'cool'}
+  };
 
   constructor() {
     // Set Actions Column
@@ -35,7 +40,7 @@ export class AppComponent {
     const n = 1000;
     for (let i = 0; i < n; i++) {
       this.rowData.push(
-        new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i - n / 2, i / 29, i / 29, 0, false, 'Long text goes here!'));
+        new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i - n / 2, i / 29, i / 29, 0, false, 'Long text goes here!', n + ''));
     }
 
     /* Create column definitions */
@@ -65,6 +70,9 @@ export class AppComponent {
     const column8 = new Column('Text Area', 'textarea');
     column8.input = TextAreaInputComponent;
 
+    const column9 = new Column('Custom Component', 'na');
+    column9.customComponent = true;
+
     this.columns.push(column1);
     this.columns.push(column2);
     this.columns.push(column3);
@@ -73,6 +81,7 @@ export class AppComponent {
     this.columns.push(column6);
     this.columns.push(column7);
     this.columns.push(column8);
+    this.columns.push(column9);
   }
 
   change(rce: RowChangedEvent) {
@@ -111,7 +120,14 @@ export class AppComponent {
   action(action: any) {
     console.log(action);
   }
+
+  changeStuff() {
+    this.rowData[0].customComponentData = 'hello';
+    console.log(this.rowData[0]);
+  }
 }
+
+
 
 class Thing {
   constructor(public label: string,
@@ -121,7 +137,8 @@ class Thing {
               public percent: number,
               public option: number,
               public boolean: boolean,
-              public textarea: string) {
+              public textarea: string,
+              public customComponentData: any) {
   }
 }
 

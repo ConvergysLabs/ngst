@@ -6,9 +6,11 @@
             [canCreate]="true"
             [canEdit]="true"
             [canClick]="true"
+            [componentWrapper]="demoComponent"
             (rowChanged)="change($event)"
             (rowDeleted)="delete($event)"
             (rowAdded)="add($event)"
             (rowClicked)="click($event)"
             (rowAction)="action($event)">
 </ngst-table>
+<button (click)="changeStuff()">Change Stuff</button>

@@ -25,6 +25,7 @@ import {StopPropogationDirective} from './directives/stop-propogation.directive'
 import {SelectionInputComponent} from './inputs/selection-input/selection-input.component';
 import {BooleanInputComponent} from './inputs/boolean-input/boolean-input.component';
 import {TextAreaInputComponent} from './inputs/raw-input/text-area-input.component';
+import {DynamicCellComponent} from './dynamic-cell/dynamic-cell.component';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import {TextAreaInputComponent} from './inputs/raw-input/text-area-input.compone
     BooleanInputComponent,
     InputContainerComponent,
     NewRowDialogComponent,
+    DynamicCellComponent,
     StopPropogationDirective
   ],
   exports: [

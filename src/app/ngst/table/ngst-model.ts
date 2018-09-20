@@ -1,4 +1,4 @@
-import {Type} from '@angular/core';
+import {Component, Type} from '@angular/core';
 import {RawInputComponent} from '../inputs/raw-input/raw-input.component';
 
 export class Column {
@@ -6,7 +6,8 @@ export class Column {
   public editor: Editor = new StringEditor();
   public input: Type<{}> = RawInputComponent;
   public editable: boolean = true;
-
+  public customComponent: boolean = false;
+  public componentWrapper: ComponentWrapper;
   constructor(public label: string,
               public accessor: string) {
   }
@@ -155,4 +156,9 @@ export class Action {
   constructor(public name: string,
               public icon: string) {
   }
+}
+
+export class ComponentWrapper {
+  component: any;
+  data: any;
 }
