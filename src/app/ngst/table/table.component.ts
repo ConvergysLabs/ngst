@@ -19,7 +19,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() canEdit: boolean;
   @Input() canCreate: boolean;
   @Input() canClick: boolean;
-  @Input() componentWrapper: any;
 
   @Output() rowChanged: EventEmitter<RowChangedEvent> = new EventEmitter();
   @Output() rowDeleted: EventEmitter<any> = new EventEmitter();

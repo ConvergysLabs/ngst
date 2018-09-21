@@ -1,6 +1,7 @@
 import {Component, ComponentFactoryResolver, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {PolymorphicContainerDirective} from '../directives/polymorphic-container.directive';
 import {CustomComponent} from './customComponent';
+import {optimizeGroupPlayer} from '@angular/animations/browser/src/render/shared';
 
 @Component({
   selector: 'ngst-dynamic-cell',
@@ -9,7 +10,7 @@ import {CustomComponent} from './customComponent';
 })
 export class DynamicCellComponent implements OnInit, OnChanges {
 
-  @Input() componentWrapper;
+  @Input() component;
   @Input() data;
 
   componentRef;
@@ -30,7 +31,7 @@ export class DynamicCellComponent implements OnInit, OnChanges {
 
   loadComponent() {
 
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.componentWrapper.component);
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.component);
 
     const viewContainerRef = this.polymorphicContainerDirective.viewContainerRef;
 

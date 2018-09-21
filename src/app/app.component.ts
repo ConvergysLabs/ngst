@@ -18,14 +18,8 @@ import {DemoComponent} from './demo/demo.component';
 })
 export class AppComponent {
   columns: Array<Column> = [];
-  columns2: Array<Column> = [];
   rowData: Array<Thing> = [];
-  row2: Array<Thing>;
   actions: Array<Action> = [];
-  demoComponent = {
-    component: DemoComponent,
-    data: {stuff: 'cool'}
-  };
 
   constructor() {
     // Set Actions Column
@@ -42,7 +36,18 @@ export class AppComponent {
     const n = 1000;
     for (let i = 0; i < n; i++) {
       this.rowData.push(
-        new Thing('<i>Thing</i> ' + i, 'No Edit <b>' + i + '</b>', i - n / 2, i / 29, i / 29, 0, false, 'Long text goes here!', n + ''));
+        new Thing('<i>Thing</i> ' + i,
+          'No Edit <b>' + i + '</b>',
+          i - n / 2,
+          i / 29,
+          i / 29,
+          0,
+          false,
+          'Long text goes here!',
+          {
+            first: `firstData: ${i}`,
+            second: `sendData: ${i - n / 2}`
+          }));
     }
 
     /* Create column definitions */
@@ -72,8 +77,8 @@ export class AppComponent {
     const column8 = new Column('Text Area', 'textarea');
     column8.input = TextAreaInputComponent;
 
-    const column9 = new Column('Custom Component', 'na');
-    column9.customComponent = true;
+    const column9 = new Column('Custom Component', 'customComponentData');
+    column9.customComponent = DemoComponent;
 
     this.columns.push(column1);
     this.columns.push(column2);
@@ -84,7 +89,6 @@ export class AppComponent {
     this.columns.push(column7);
     this.columns.push(column8);
     this.columns.push(column9);
-    this.columns2 = [column1, column2, column3, column4, column5];
   }
 
   change(rce: RowChangedEvent) {
@@ -124,10 +128,6 @@ export class AppComponent {
     console.log(action);
   }
 
-  changeStuff() {
-    this.rowData[0].customComponentData = 'hello';
-    console.log(this.rowData[0]);
-  }
 }
 
 

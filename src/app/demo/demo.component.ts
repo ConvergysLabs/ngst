@@ -14,7 +14,11 @@ export class DemoComponent implements OnInit {
   ngOnInit() {
   }
 
-  clicked() {
-    console.log(this.data);
+  firstClicked() {
+    console.log(this.data.first);
+  }
+
+  secondClicked() {
+    console.log(this.data.second);
   }
 }
