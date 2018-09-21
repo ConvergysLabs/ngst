@@ -127,10 +127,7 @@ export class AppComponent {
   action(action: any) {
     console.log(action);
   }
-
 }
-
-
 
 class Thing {
   constructor(public label: string,
