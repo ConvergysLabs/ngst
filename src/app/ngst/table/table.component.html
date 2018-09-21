@@ -39,7 +39,7 @@
 
         <!--Edit-->
         <div *ngIf="!column.customComponent">
-          <ng-container *ngIf="row === editRow && column === editColumn && column.editable && canEdit && !column.customComponent">
+          <ng-container *ngIf="row === editRow && column === editColumn && column.editable && canEdit">
             <!--Polymorphism is hot!-->
             <ngst-input-container [item]="row"
                                   [column]="column"
@@ -49,7 +49,7 @@
           </ng-container>
 
           <!--Display-->
-          <ng-container *ngIf="row != editRow || column != editColumn || !column.editable || !canEdit && !column.customComponent">
+          <ng-container *ngIf="row != editRow || column != editColumn || !column.editable || !canEdit">
             <!--Not editable-->
             <div *ngIf="!isEmpty(column.getRowValue(row)) && !column.editable || !canEdit || row.disabled"
                  [class.ngst-clickable]="canClick"
@@ -63,7 +63,7 @@
             </div>
 
             <!--Editable-->
-            <div *ngIf="!isEmpty(column.getRowValue(row)) && column.editable && canEdit && !row.disabled && !column.customComponent"
+            <div *ngIf="!isEmpty(column.getRowValue(row)) && column.editable && canEdit && !row.disabled"
                  (click)="clickCell(row, column)" ngstStopPropogation
                  class="ngst-editable {{columnLabel(column)}}"
                  [innerHTML]="column.formatValue(row)"></div>

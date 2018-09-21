@@ -27,6 +27,7 @@ import {BooleanInputComponent} from './inputs/boolean-input/boolean-input.compon
 import {TextAreaInputComponent} from './inputs/raw-input/text-area-input.component';
 import {DynamicCellComponent} from './dynamic-cell/dynamic-cell.component';
 
+
 @NgModule({
   imports: [
     CommonModule,

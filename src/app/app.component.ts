@@ -18,7 +18,9 @@ import {DemoComponent} from './demo/demo.component';
 })
 export class AppComponent {
   columns: Array<Column> = [];
+  columns2: Array<Column> = [];
   rowData: Array<Thing> = [];
+  row2: Array<Thing>;
   actions: Array<Action> = [];
   demoComponent = {
     component: DemoComponent,
@@ -82,6 +84,7 @@ export class AppComponent {
     this.columns.push(column7);
     this.columns.push(column8);
     this.columns.push(column9);
+    this.columns2 = [column1, column2, column3, column4, column5];
   }
 
   change(rce: RowChangedEvent) {

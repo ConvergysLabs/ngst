@@ -1,6 +1,6 @@
 import {Component, ComponentFactoryResolver, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {PolymorphicContainerDirective} from '../directives/polymorphic-container.directive';
-import {CustomComponent} from './customComponent.component';
+import {CustomComponent} from './customComponent';
 
 @Component({
   selector: 'ngst-dynamic-cell',
