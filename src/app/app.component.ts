@@ -45,8 +45,8 @@ export class AppComponent {
           false,
           'Long text goes here!',
           {
-            first: `firstData: ${i}`,
-            second: `sendData: ${i - n / 2}`
+            first: `first Data: ${i}`,
+            second: `second Data: ${i - n / 2}`
           }));
     }
 
