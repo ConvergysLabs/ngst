@@ -6,7 +6,7 @@ export class Column {
   public editor: Editor = new StringEditor();
   public input: Type<{}> = RawInputComponent;
   public editable: boolean = true;
-
+  public customComponent: any;
   constructor(public label: string,
               public accessor: string) {
   }
@@ -156,3 +156,4 @@ export class Action {
               public icon: string) {
   }
 }
+

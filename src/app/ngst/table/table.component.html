@@ -32,40 +32,47 @@
     <ng-container *ngFor="let column of columns" [matColumnDef]="column.label">
       <mat-header-cell *matHeaderCellDef mat-sort-header>{{column.label}}</mat-header-cell>
       <mat-cell *matCellDef="let row">
+
+        <ng-container *ngIf="column.customComponent">
+          <ngst-dynamic-cell [component]="column.customComponent" [data]="column.getRowValue(row)"></ngst-dynamic-cell>
+        </ng-container>
+
         <!--Edit-->
-        <ng-container *ngIf="row === editRow && column === editColumn && column.editable && canEdit">
-          <!--Polymorphism is hot!-->
-          <ngst-input-container [item]="row"
-                                [column]="column"
-                                [showPlaceholder]="false"
-                                (changedEmitter)="changeRow(row, column, $event)">
-          </ngst-input-container>
-        </ng-container>
+        <div *ngIf="!column.customComponent">
+          <ng-container *ngIf="row === editRow && column === editColumn && column.editable && canEdit">
+            <!--Polymorphism is hot!-->
+            <ngst-input-container [item]="row"
+                                  [column]="column"
+                                  [showPlaceholder]="false"
+                                  (changedEmitter)="changeRow(row, column, $event)">
+            </ngst-input-container>
+          </ng-container>
 
-        <!--Display-->
-        <ng-container *ngIf="row != editRow || column != editColumn || !column.editable || !canEdit">
-          <!--Not editable-->
-          <div *ngIf="!isEmpty(column.getRowValue(row)) && !column.editable || !canEdit || row.disabled"
-               [class.ngst-clickable]="canClick"
-               [ngClass]="{'ngst-disabled' : row.disabled}"
-               class="ngst-not-editable {{columnLabel(column)}}"
-               [innerHTML]="column.formatValue(row)"></div>
-          <div *ngIf="isEmpty(column.getRowValue(row)) && (!column.editable || !canEdit || row.disabled)"
-               [ngClass]="{'ngst-disabled' : row.disabled}"
-               [class.ngst-clickable]="canClick"
-               class="ngst-not-editable ngst-empty {{columnLabel(column)}}">empty
-          </div>
+          <!--Display-->
+          <ng-container *ngIf="row != editRow || column != editColumn || !column.editable || !canEdit">
+            <!--Not editable-->
+            <div *ngIf="!isEmpty(column.getRowValue(row)) && !column.editable || !canEdit || row.disabled"
+                 [class.ngst-clickable]="canClick"
+                 [ngClass]="{'ngst-disabled' : row.disabled}"
+                 class="ngst-not-editable {{columnLabel(column)}}"
+                 [innerHTML]="column.formatValue(row)"></div>
+            <div *ngIf="isEmpty(column.getRowValue(row)) && (!column.editable || !canEdit || row.disabled)"
+                 [ngClass]="{'ngst-disabled' : row.disabled}"
+                 [class.ngst-clickable]="canClick"
+                 class="ngst-not-editable ngst-empty {{columnLabel(column)}}">empty
+            </div>
 
-          <!--Editable-->
-          <div *ngIf="!isEmpty(column.getRowValue(row)) && column.editable && canEdit && !row.disabled"
-               (click)="clickCell(row, column)" ngstStopPropogation
-               class="ngst-editable {{columnLabel(column)}}"
-               [innerHTML]="column.formatValue(row)"></div>
-          <div *ngIf="isEmpty(column.getRowValue(row)) && column.editable && canEdit && !row.disabled"
-               (click)="clickCell(row, column)" ngstStopPropogation
-               class="ngst-editable ngst-empty {{columnLabel(column)}}">empty
-          </div>
-        </ng-container>
+            <!--Editable-->
+            <div *ngIf="!isEmpty(column.getRowValue(row)) && column.editable && canEdit && !row.disabled"
+                 (click)="clickCell(row, column)" ngstStopPropogation
+                 class="ngst-editable {{columnLabel(column)}}"
+                 [innerHTML]="column.formatValue(row)"></div>
+            <div *ngIf="isEmpty(column.getRowValue(row)) && column.editable && canEdit && !row.disabled"
+                 (click)="clickCell(row, column)" ngstStopPropogation
+                 class="ngst-editable ngst-empty {{columnLabel(column)}}">empty
+            </div>
+          </ng-container>
+        </div>
       </mat-cell>
     </ng-container>
 
@@ -85,3 +92,4 @@
                  (page)="paginate($event)">
   </mat-paginator>
 </div>
+
