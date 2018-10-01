@@ -34,7 +34,7 @@
       <mat-cell *matCellDef="let row">
 
         <ng-container *ngIf="column.customComponent">
-          <ngst-dynamic-cell [component]="column.customComponent" [data]="column.getRowValue(row)"></ngst-dynamic-cell>
+          <ngst-dynamic-cell [component]="column.customComponent" [data]="row[column.accessor]"></ngst-dynamic-cell>
         </ng-container>
 
         <!--Edit-->
