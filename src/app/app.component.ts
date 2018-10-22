@@ -24,8 +24,8 @@ export class AppComponent {
   constructor() {
     // Set Actions Column
 
-    const action1 = new Action('play', 'play_arrow');
-    const action2 = new Action('configure', 'build');
+    const action1 = new Action('play', 'play_arrow', 'tooltip play');
+    const action2 = new Action('configure', 'build', 'tooltip configure');
     const action3 = new Action('red', 'favorite');
 
     this.actions.push(action1);
