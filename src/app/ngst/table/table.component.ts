@@ -1,13 +1,24 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {Column, Action} from './ngst-model';
-import {MatDialog, MatPaginator, MatSort, MatTableDataSource, PageEvent} from '@angular/material';
+import {MatDialog, MatPaginator, MatSort, MatTableDataSource, PageEvent, MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material';
 import {NewRowDialogComponent} from '../new-row-dialog/new-row-dialog.component';
 import {isNullOrUndefined} from 'util';
+
+/** Custom options the configure the tooltip's default show/hide delays. */
+export const myCustomTooltipDefaults: MatTooltipDefaultOptions = { 
+  showDelay: 500, 
+  hideDelay: 100, 
+  touchendHideDelay: 500 
+};
 
 @Component({
   selector: 'ngst-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss']
+  styleUrls: ['./table.component.scss'],
+  providers: [ 
+    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults} 
+  ]
+
 })
 export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() title: string;
@@ -33,7 +44,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   columnIndexes: Array<string> = [];
 
   combinedActions: Array<Action> = [];
-  deletAction: Action = new Action('delete', 'delete');
+  deletAction: Action = new Action('delete', 'delete', 'Delete Item');
 
   editRow: any;
   editColumn: Column;
