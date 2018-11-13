@@ -153,7 +153,9 @@ export class SelectionMap {
 
 export class Action {
   constructor(public name: string,
-              public icon: string) {
+              public icon: string,
+              public tooltip: string = null
+              ) {
   }
 }
 
