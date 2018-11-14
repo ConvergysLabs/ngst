@@ -5,18 +5,18 @@ import {NewRowDialogComponent} from '../new-row-dialog/new-row-dialog.component'
 import {isNullOrUndefined} from 'util';
 
 /** Custom options the configure the tooltip's default show/hide delays. */
-export const myCustomTooltipDefaults: MatTooltipDefaultOptions = { 
-  showDelay: 500, 
-  hideDelay: 100, 
-  touchendHideDelay: 500 
+export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
+  showDelay: 500,
+  hideDelay: 100,
+  touchendHideDelay: 500
 };
 
 @Component({
   selector: 'ngst-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
-  providers: [ 
-    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults} 
+  providers: [
+    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults}
   ]
 
 })
@@ -86,7 +86,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
     this.rows = this.rowData.length;
     this.pageIndex = 0;
-    this.doSort();
+    this.doPaginate();
+    //this.doSort();
   }
 
   setActionColumn() {
@@ -108,14 +109,17 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  doSort() {
-    this.rawDataSource.data = this.rawDataSource.sortData(this.rowData, this.sort);
-
-
+  doPaginate(){
     const pe = new PageEvent();
     pe.pageIndex = this.pageIndex;
     pe.pageSize = this.pageSize;
     this.paginate(pe);
+  }
+
+  doSort() {
+    console.log("Ordenando...")
+    this.rawDataSource.data = this.rawDataSource.sortData(this.rowData, this.sort);
+    this.doPaginate();
   }
 
   paginate(page: PageEvent) {
