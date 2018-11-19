@@ -50,44 +50,64 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   editColumn: Column;
   showActions: boolean;
   pageIndex: number = 0;
-  rows: number = 0;
+  rows: number = 0;    
+  rowChange: boolean = false;
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog) {    
   }
 
   ngOnInit() {
-    // this.updateTable();
   }
 
-  ngOnChanges() {
-    this.updateTable();
+  ngOnChanges(changes: any) {            
+    this.updateTable();       
   }
 
   ngAfterViewInit() {
   }
 
-  updateTable() {
-    this.rawDataSource.data = this.rowData;
-    this.rawDataSource.sortingDataAccessor = (data: any, sortHeaderId: string): string | number => {
-      // Get the column with the header id
-      const column = this.columns.filter(c => c.label === sortHeaderId)[0];
-      return column.getRowValue(data);
-    };
+  updateTable() {    
+    console.log(this.rowChange);
 
-    this.columnIndexes = [];
+    if(!this.rowChange){
+      this.rawDataSource.data =  this.rowData.map(x => Object.assign({}, x)); 
+      this.rawDataSource.sortingDataAccessor = (data: any, sortHeaderId: string): string | number => {
+        // Get the column with the header id
+        const column = this.columns.filter(c => c.label === sortHeaderId)[0];
+        return column.getRowValue(data);
+      };
+      
+      this.columnIndexes = [];
+  
+      this.setActionColumn();
+  
+      this.columnIndexes.push(...this.columns.map(c => c.label));
+  
+      // Reset editors
+      this.editRow = null;
+      this.editColumn = null;
+  
+      this.rows = this.rowData.length;
+      
+      this.pageIndex = 0;    
+      this.doSort(); 
 
-    this.setActionColumn();
+    }else{
+      this.rowChange = false;
+      this.editRow = null;
+      this.editColumn = null;  
+      
+  
 
-    this.columnIndexes.push(...this.columns.map(c => c.label));
+      const pe = new PageEvent();
+      pe.pageIndex = this.pageIndex;
+      pe.pageSize = this.pageSize;
+      this.paginate(pe);
 
-    // Reset editors
-    this.editRow = null;
-    this.editColumn = null;
-
-    this.rows = this.rowData.length;
-    this.pageIndex = 0;
-    this.doPaginate();
-    //this.doSort();
+      this.sort.active = '';            
+      this.sort._stateChanges.next();
+    }   
+    
   }
 
   setActionColumn() {
@@ -109,17 +129,14 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  doPaginate(){
+  doSort() {        
+    const rowsClone = this.rowData.map(x => Object.assign({}, x)); 
+    this.rawDataSource.data = this.rawDataSource.sortData(rowsClone, this.sort);   
+
     const pe = new PageEvent();
     pe.pageIndex = this.pageIndex;
     pe.pageSize = this.pageSize;
     this.paginate(pe);
-  }
-
-  doSort() {
-    console.log("Ordenando...")
-    this.rawDataSource.data = this.rawDataSource.sortData(this.rowData, this.sort);
-    this.doPaginate();
   }
 
   paginate(page: PageEvent) {
@@ -133,23 +150,31 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     return isNullOrUndefined(value) || value === '';
   }
 
-  clickCell(rowData: any, column: Column) {
+  clickCell(rowData: any, column: Column) {    
     this.editRow = rowData;
-    this.editColumn = column;
+    this.editColumn = column;  
   }
 
-  clickRow(row: any) {
+  clickRow(row: any) {    
     if (this.canClick) {
       this.rowClicked.emit(row);
-    }
+    }         
   }
 
-  changeRow(row: any, column: Column, newValue: any) {
+  changeRow(row: any, column: Column, newValue: any) {    
     // Clone the user's data
-    const clone = Object.assign({}, ...row);
+
+    console.log(newValue);
+
+    this.rowChange= true;     
+
+    const clone = Object.assign({}, ...row);   
 
     // Mutate the clone
-    column.editor.edit(clone, column, newValue);
+    column.editor.edit(clone, column, newValue);    
+
+    const rowFound = this.rawDataSource.data.findIndex(x => x.uuid == clone.uuid);
+    this.rawDataSource.data[rowFound] = clone;
 
     // Let the user know that a change has occurred
     this.rowChanged.emit(new RowChangedEvent(row, clone, column, newValue));
