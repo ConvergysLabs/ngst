@@ -50,64 +50,54 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   editColumn: Column;
   showActions: boolean;
   pageIndex: number = 0;
-  rows: number = 0;    
-  rowChange: boolean = false;
+  rows: number = 0;
+  changeRowValue: boolean = false;
 
-  constructor(private dialog: MatDialog) {    
+  constructor(private dialog: MatDialog) {
   }
 
   ngOnInit() {
+    // this.updateTable();
   }
 
-  ngOnChanges(changes: any) {            
-    this.updateTable();       
+  ngOnChanges() {
+    this.updateTable();
   }
 
   ngAfterViewInit() {
   }
 
   updateTable() {    
-    console.log(this.rowChange);
 
-    if(!this.rowChange){
-      this.rawDataSource.data =  this.rowData.map(x => Object.assign({}, x)); 
+    this.columnIndexes = [];
+
+    this.setActionColumn();
+
+    this.columnIndexes.push(...this.columns.map(c => c.label));
+
+    // Reset editors
+    this.editRow = null;
+    this.editColumn = null;
+
+    this.rows = this.rowData.length;    
+    //Prevent automatic sort
+    if(!this.changeRowValue){
+      this.rawDataSource.data = this.rowData;
       this.rawDataSource.sortingDataAccessor = (data: any, sortHeaderId: string): string | number => {
         // Get the column with the header id
         const column = this.columns.filter(c => c.label === sortHeaderId)[0];
         return column.getRowValue(data);
       };
-      
-      this.columnIndexes = [];
-  
-      this.setActionColumn();
-  
-      this.columnIndexes.push(...this.columns.map(c => c.label));
-  
-      // Reset editors
-      this.editRow = null;
-      this.editColumn = null;
-  
-      this.rows = this.rowData.length;
-      
-      this.pageIndex = 0;    
-      this.doSort(); 
 
+      this.pageIndex = 0;
+      this.doSort();
     }else{
-      this.rowChange = false;
-      this.editRow = null;
-      this.editColumn = null;  
-      
-  
+      this.changeRowValue = false;
+      this.doPaginate();
 
-      const pe = new PageEvent();
-      pe.pageIndex = this.pageIndex;
-      pe.pageSize = this.pageSize;
-      this.paginate(pe);
-
-      this.sort.active = '';            
+      this.sort.active = '';
       this.sort._stateChanges.next();
-    }   
-    
+    }  
   }
 
   setActionColumn() {
@@ -129,10 +119,12 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  doSort() {        
-    const rowsClone = this.rowData.map(x => Object.assign({}, x)); 
-    this.rawDataSource.data = this.rawDataSource.sortData(rowsClone, this.sort);   
+  doSort() {
+    this.rawDataSource.data = this.rawDataSource.sortData(this.rowData, this.sort);
+    this.doPaginate();
+  }
 
+  doPaginate(){
     const pe = new PageEvent();
     pe.pageIndex = this.pageIndex;
     pe.pageSize = this.pageSize;
@@ -150,31 +142,29 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     return isNullOrUndefined(value) || value === '';
   }
 
-  clickCell(rowData: any, column: Column) {    
+  clickCell(rowData: any, column: Column) {
     this.editRow = rowData;
-    this.editColumn = column;  
+    this.editColumn = column;
   }
 
-  clickRow(row: any) {    
+  clickRow(row: any) {
     if (this.canClick) {
       this.rowClicked.emit(row);
-    }         
+    }
   }
 
-  changeRow(row: any, column: Column, newValue: any) {    
+  changeRow(row: any, column: Column, newValue: any) {
+    //Flag for change flow on update table
+    this.changeRowValue = true;
     // Clone the user's data
-
-    console.log(newValue);
-
-    this.rowChange= true;     
-
-    const clone = Object.assign({}, ...row);   
+    const clone = Object.assign({}, ...row);
 
     // Mutate the clone
-    column.editor.edit(clone, column, newValue);    
+    column.editor.edit(clone, column, newValue);
 
     const rowFound = this.rawDataSource.data.findIndex(x => x.uuid == clone.uuid);
     this.rawDataSource.data[rowFound] = clone;
+    
 
     // Let the user know that a change has occurred
     this.rowChanged.emit(new RowChangedEvent(row, clone, column, newValue));
