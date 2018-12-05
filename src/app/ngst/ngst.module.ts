@@ -26,12 +26,14 @@ import {SelectionInputComponent} from './inputs/selection-input/selection-input.
 import {BooleanInputComponent} from './inputs/boolean-input/boolean-input.component';
 import {TextAreaInputComponent} from './inputs/raw-input/text-area-input.component';
 import {DynamicCellComponent} from './dynamic-cell/dynamic-cell.component';
+import { AdvancedSearchComponent } from './advanced-search/advanced-search.component';
 
 
 @NgModule({
   imports: [
     CommonModule,
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     BrowserAnimationsModule,
     MatButtonModule,
@@ -56,7 +58,8 @@ import {DynamicCellComponent} from './dynamic-cell/dynamic-cell.component';
     InputContainerComponent,
     NewRowDialogComponent,
     DynamicCellComponent,
-    StopPropogationDirective
+    StopPropogationDirective,
+    AdvancedSearchComponent
   ],
   exports: [
     TableComponent,
@@ -66,6 +69,7 @@ import {DynamicCellComponent} from './dynamic-cell/dynamic-cell.component';
     BooleanInputComponent,
   ],
   entryComponents: [
+    AdvancedSearchComponent,
     RawInputComponent,
     TextAreaInputComponent,
     SelectionInputComponent,

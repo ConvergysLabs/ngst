@@ -15,7 +15,11 @@
   <mat-table #table [dataSource]="paginatedDataSource" matSort (matSortChange)="doSort()">
     <!--Actions-->
     <ng-container matColumnDef="ngst-actions" *ngIf="showActions">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        <button mat-mini-fab (click)="toggleFilters()" >
+          <mat-icon>filter_list</mat-icon>
+        </button>
+      </mat-header-cell>
       <mat-cell *matCellDef="let row">
         <button mat-icon-button
                 matTooltip="{{action.tooltip}}"
@@ -33,13 +37,12 @@
     <ng-container *ngFor="let column of columns" [matColumnDef]="column.label">
       <mat-header-cell *matHeaderCellDef mat-sort-header>{{column.label}}</mat-header-cell>
       <mat-cell *matCellDef="let row">
-
-        <ng-container *ngIf="column.customComponent">
+        <ng-container *ngIf="column.customComponent && !row.filterRow">
           <ngst-dynamic-cell [component]="column.customComponent" [data]="row[column.accessor]"></ngst-dynamic-cell>
         </ng-container>
 
         <!--Edit-->
-        <div *ngIf="!column.customComponent">
+        <div *ngIf="!column.customComponent && !row.filterRow">
           <ng-container *ngIf="row === editRow && column === editColumn && column.editable && canEdit">
             <!--Polymorphism is hot!-->
             <ngst-input-container [item]="row"
@@ -77,10 +80,22 @@
       </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let row" (click)="logit(row)" class="filterRow">
+        <mat-cell *ngIf="showActions"></mat-cell>
+        <mat-cell *ngFor="let column of columns">
+          <ngst-advanced-search [column]="column"></ngst-advanced-search>
+        </mat-cell>
+      </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="columnIndexes"></mat-header-row>
     <mat-row *matRowDef="let row; columns: columnIndexes;"
              [class.ngst-clickable]="canClick"
              (click)="clickRow(row)"></mat-row>
+    <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
+             [@detailExpand]="filtersOpen ? 'expanded' : 'collapsed'"
+             style="overflow: hidden"></mat-row>
   </mat-table>
 
   <!--Paginator-->
