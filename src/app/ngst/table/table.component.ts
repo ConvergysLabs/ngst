@@ -153,7 +153,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  changeRow(row: any, column: Column, newValue: any) {
+  changeRow(row: any, column: Column, newValue: any) {    
     //Flag for change flow on update table
     this.changeRowValue = true;
     // Clone the user's data
@@ -162,10 +162,10 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     // Mutate the clone
     column.editor.edit(clone, column, newValue);
 
-    const rowFound = this.rawDataSource.data.findIndex(x => x.uuid == clone.uuid);
+    const rowFound = this.rawDataSource.data.indexOf(row);
     this.rawDataSource.data[rowFound] = clone;
-    
 
+    
     // Let the user know that a change has occurred
     this.rowChanged.emit(new RowChangedEvent(row, clone, column, newValue));
   }
