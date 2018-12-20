@@ -34,7 +34,20 @@ export class AppComponent {
 
     /* Generate some sample data */
     const n = 1000;
-    for (let i = 0; i < n; i++) {
+    this.rowData.push(
+      new Thing('<i>Thing</i> ' + 0,
+        null,
+        0 - n / 2,
+        0 / 29,
+        0 / 29,
+        0,
+        false,
+        'Long text goes here!',
+        {
+          first: `first Data: ${0}`,
+          second: `second Data: ${0 - n / 2}`
+        }));
+    for (let i = 1; i < n; i++) {
       this.rowData.push(
         new Thing('<i>Thing</i> ' + i,
           'No Edit <b>' + i + '</b>',
@@ -54,7 +67,7 @@ export class AppComponent {
     const column1 = new Column('Label', 'label');
 
     const column2 = new Column('No Edit', 'noedit');
-    column2.editable = false;
+    // column2.editable = false;
 
     const column3 = new Column('Integer', 'integer');
     column3.formatter = new IntegerFormatter();
@@ -138,7 +151,8 @@ class Thing {
               public option: number,
               public boolean: boolean,
               public textarea: string,
-              public customComponentData: any) {
+              public customComponentData: any,
+              public disabled?: true) {
   }
 }
 

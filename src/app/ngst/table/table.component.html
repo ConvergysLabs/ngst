@@ -12,11 +12,11 @@
   </div>
 
   <!--Table-->
-  <mat-table #table [dataSource]="paginatedDataSource" matSort (matSortChange)="doSort()">
+  <mat-table #table [dataSource]="rawDataSource" matSort (matSortChange)="doSort()">
     <!--Actions-->
     <ng-container matColumnDef="ngst-actions" *ngIf="showActions">
       <mat-header-cell *matHeaderCellDef>
-        <button mat-mini-fab (click)="toggleFilters()" >
+        <button *ngIf="filters" mat-icon-button (click)="toggleFilters()" >
           <mat-icon>filter_list</mat-icon>
         </button>
       </mat-header-cell>
@@ -55,7 +55,7 @@
           <!--Display-->
           <ng-container *ngIf="row != editRow || column != editColumn || !column.editable || !canEdit">
             <!--Not editable-->
-            <div *ngIf="!isEmpty(column.getRowValue(row)) && !column.editable || !canEdit || row.disabled"
+            <div *ngIf="!isEmpty(column.getRowValue(row)) && (!column.editable || !canEdit || row.disabled)"
                  [class.ngst-clickable]="canClick"
                  [ngClass]="{'ngst-disabled' : row.disabled}"
                  class="ngst-not-editable {{columnLabel(column)}}"
@@ -81,21 +81,23 @@
     </ng-container>
 
     <ng-container matColumnDef="expandedDetail">
-      <mat-cell *matCellDef="let row" (click)="logit(row)" class="filterRow">
-        <mat-cell *ngIf="showActions"></mat-cell>
-        <mat-cell *ngFor="let column of columns">
-          <ngst-advanced-search [column]="column"></ngst-advanced-search>
+      <mat-header-cell *matHeaderCellDef class="filterRow">
+        <mat-cell *ngIf="showActions" class="mat-column-ngst-actions">
+          <button mat-icon-button (click)="clearFilters()">
+            <mat-icon>undo</mat-icon>
+          </button>
         </mat-cell>
-      </mat-cell>
+        <mat-cell *ngFor="let column of columns">
+          <ngst-advanced-search [column]="column" (applyFilter)="applyFilter($event, column)" class="filter-cell"></ngst-advanced-search>
+        </mat-cell>
+      </mat-header-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="columnIndexes"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="['expandedDetail']" [@detailExpand]="filtersOpen ? 'expanded' : 'collapsed'"></mat-header-row>
     <mat-row *matRowDef="let row; columns: columnIndexes;"
              [class.ngst-clickable]="canClick"
              (click)="clickRow(row)"></mat-row>
-    <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
-             [@detailExpand]="filtersOpen ? 'expanded' : 'collapsed'"
-             style="overflow: hidden"></mat-row>
   </mat-table>
 
   <!--Paginator-->

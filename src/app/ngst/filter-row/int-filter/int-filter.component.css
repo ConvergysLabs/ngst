@@ -1,0 +1,8 @@
+.int-field {
+  display: flex;
+}
+
+.comparator-select {
+  width: 50px;
+  margin-right: 5px;
+}

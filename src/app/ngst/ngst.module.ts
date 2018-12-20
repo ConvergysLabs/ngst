@@ -26,7 +26,10 @@ import {SelectionInputComponent} from './inputs/selection-input/selection-input.
 import {BooleanInputComponent} from './inputs/boolean-input/boolean-input.component';
 import {TextAreaInputComponent} from './inputs/raw-input/text-area-input.component';
 import {DynamicCellComponent} from './dynamic-cell/dynamic-cell.component';
-import { AdvancedSearchComponent } from './advanced-search/advanced-search.component';
+import { FilterRowComponent } from './filter-row/filter-row.component';
+import { IntFilterComponent } from './filter-row/int-filter/int-filter.component';
+import {FilterCellComponent} from './filter-row/filter-cell';
+import { StringFilterComponent } from './filter-row/string-filter/string-filter.component';
 
 
 @NgModule({
@@ -59,7 +62,10 @@ import { AdvancedSearchComponent } from './advanced-search/advanced-search.compo
     NewRowDialogComponent,
     DynamicCellComponent,
     StopPropogationDirective,
-    AdvancedSearchComponent
+    FilterRowComponent,
+    IntFilterComponent,
+    FilterCellComponent,
+    StringFilterComponent
   ],
   exports: [
     TableComponent,
@@ -69,7 +75,7 @@ import { AdvancedSearchComponent } from './advanced-search/advanced-search.compo
     BooleanInputComponent,
   ],
   entryComponents: [
-    AdvancedSearchComponent,
+    FilterRowComponent,
     RawInputComponent,
     TextAreaInputComponent,
     SelectionInputComponent,

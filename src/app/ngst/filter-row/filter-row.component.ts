@@ -1,13 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ViewChildren} from '@angular/core';
 import {BooleanFormatter, DigitsOfPrecisionFormatter, IntegerFormatter, StringFormatter} from '../table/ngst-model';
+import {FilterCellComponent} from './filter-cell';
 
 @Component({
   selector: 'ngst-advanced-search',
-  templateUrl: './advanced-search.component.html',
-  styleUrls: ['./advanced-search.component.css']
+  templateUrl: './filter-row.component.html',
+  styleUrls: ['./filter-row.component.css']
 })
-export class AdvancedSearchComponent implements OnInit {
+export class FilterRowComponent implements OnInit {
   @Input() column;
+  @Output() applyFilter: EventEmitter<any> = new EventEmitter();
+  @ViewChild('filterCell') filterCell: FilterCellComponent;
+
   type = 'other';
 
   constructor() { }
@@ -26,4 +30,9 @@ export class AdvancedSearchComponent implements OnInit {
     }
   }
 
+  clear() {
+    if (this.filterCell) {
+      this.filterCell.clear();
+    }
+  }
 }

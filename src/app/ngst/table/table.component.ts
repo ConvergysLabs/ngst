@@ -1,9 +1,20 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {Column, Action} from './ngst-model';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource, PageEvent, MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material';
 import {NewRowDialogComponent} from '../new-row-dialog/new-row-dialog.component';
 import {isNullOrUndefined} from 'util';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {FilterRowComponent} from '../filter-row/filter-row.component';
 
 /** Custom options the configure the tooltip's default show/hide delays. */
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = { 
@@ -48,6 +59,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChildren(FilterRowComponent) filterCells: Array<FilterRowComponent>
   rawDataSource: MatTableDataSource<any> = new MatTableDataSource();
   paginatedDataSource: MatTableDataSource<any> = new MatTableDataSource();
   columnIndexes: Array<string> = [];
@@ -62,6 +74,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   rows: number = 0;
 
   filtersOpen = false;
+  filtersObj = {};
 
   constructor(private dialog: MatDialog) {
   }
@@ -84,6 +97,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
       const column = this.columns.filter(c => c.label === sortHeaderId)[0];
       return column.getRowValue(data);
     };
+
+    this.rawDataSource.paginator = this.paginator;
 
     this.columnIndexes = [];
 
@@ -201,19 +216,42 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     return row.disabled;
   }
 
-  isExpansionDetailRow = (i: number, row: Object) => {
-    return i === 0;
-  }
-
-  logit(row) {
-    console.log(row);
-  }
-
   toggleFilters() {
     this.filtersOpen = !this.filtersOpen;
-    console.log(this.filtersOpen);
   }
 
+  applyFilter(filterFunction, column: Column) {
+    this.filtersObj[column.accessor] = filterFunction;
+
+    const setfilters = this.setfilters(this.filtersObj);
+
+    this.rawDataSource.filterPredicate = function(data, filter: string): boolean {
+      return setfilters(data);
+    };
+
+    if(Object.keys(this.filtersObj).length > 0){
+      this.rawDataSource.filter = 'This kicks off filters';
+    } else {
+      this.rawDataSource.filter = '';
+    }
+  }
+
+  setfilters(filters) {
+    const keys = Object.keys(filters);
+    return (data) => {
+      return keys.reduce((p,c) => {
+        return p && filters[c](data, c)
+      }, true);
+    }
+  }
+
+  clearFilters() {
+    this.filterCells.map(cell => {
+      cell.clear();
+    });
+    this.filtersObj = {};
+    this.rawDataSource.filter = '';
+  }
 }
 
 export class RowChangedEvent {
