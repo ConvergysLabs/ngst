@@ -17,10 +17,10 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {FilterRowComponent} from '../filter-row/filter-row.component';
 
 /** Custom options the configure the tooltip's default show/hide delays. */
-export const myCustomTooltipDefaults: MatTooltipDefaultOptions = { 
-  showDelay: 500, 
-  hideDelay: 100, 
-  touchendHideDelay: 500 
+export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
+  showDelay: 500,
+  hideDelay: 100,
+  touchendHideDelay: 500
 };
 
 @Component({
@@ -37,6 +37,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = { 
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+
 
 })
 export class TableComponent implements OnInit, OnChanges, AfterViewInit {
@@ -72,6 +73,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   showActions: boolean;
   pageIndex: number = 0;
   rows: number = 0;
+  changeRowValue: boolean = false;
 
   filtersOpen = false;
   filtersObj = {};
@@ -90,13 +92,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   ngAfterViewInit() {
   }
 
-  updateTable() {
-    this.rawDataSource.data = this.rowData;
-    this.rawDataSource.sortingDataAccessor = (data: any, sortHeaderId: string): string | number => {
-      // Get the column with the header id
-      const column = this.columns.filter(c => c.label === sortHeaderId)[0];
-      return column.getRowValue(data);
-    };
+  updateTable() {    
 
     this.rawDataSource.paginator = this.paginator;
 
@@ -110,9 +106,25 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     this.editRow = null;
     this.editColumn = null;
 
-    this.rows = this.rowData.length;
-    this.pageIndex = 0;
-    this.doSort();
+    this.rows = this.rowData.length;    
+    //Prevent automatic sort
+    if(!this.changeRowValue){
+      this.rawDataSource.data = this.rowData;
+      this.rawDataSource.sortingDataAccessor = (data: any, sortHeaderId: string): string | number => {
+        // Get the column with the header id
+        const column = this.columns.filter(c => c.label === sortHeaderId)[0];
+        return column.getRowValue(data);
+      };
+
+      this.pageIndex = 0;
+      this.doSort();
+    }else{
+      this.changeRowValue = false;
+      this.doPaginate();
+
+      this.sort.active = '';
+      this.sort._stateChanges.next();
+    }  
   }
 
   setActionColumn() {
@@ -136,8 +148,10 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
   doSort() {
     this.rawDataSource.data = this.rawDataSource.sortData(this.rowData, this.sort);
+    this.doPaginate();
+  }
 
-
+  doPaginate(){
     const pe = new PageEvent();
     pe.pageIndex = this.pageIndex;
     pe.pageSize = this.pageSize;
@@ -166,13 +180,19 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  changeRow(row: any, column: Column, newValue: any) {
+  changeRow(row: any, column: Column, newValue: any) {    
+    //Flag for change flow on update table
+    this.changeRowValue = true;
     // Clone the user's data
     const clone = Object.assign({}, ...row);
 
     // Mutate the clone
     column.editor.edit(clone, column, newValue);
 
+    const rowFound = this.rawDataSource.data.indexOf(row);
+    this.rawDataSource.data[rowFound] = clone;
+
+    
     // Let the user know that a change has occurred
     this.rowChanged.emit(new RowChangedEvent(row, clone, column, newValue));
   }
@@ -209,8 +229,13 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     return 'ngst-' + column.accessor;
   }
 
-  checkDisabled(row, action) {
-    if (row.enabledActionNames && row.enabledActionNames.includes(action.name)) {
+
+  checkDisabled(row, action){
+    if(row.disabledActionNames && row.disabledActionNames.includes(action.name)){
+      return true;
+    }
+
+    if(row.enabledActionNames && row.enabledActionNames.includes(action.name)){
       return false;
     }
     return row.disabled;
