@@ -86,7 +86,10 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes) {
+    if (changes.columns && changes.columns.currentValue !== changes.columns.previousValue) {
+      this.clearFilters();
+    }
     this.updateTable();
   }
 
@@ -273,9 +276,12 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   clearFilters() {
-    this.filterCells.map(cell => {
-      cell.clear();
-    });
+    if (this.filterCells) {
+      this.filterCells.map(cell => {
+        cell.clear();
+      });
+    }
+
     this.filtersObj = {};
     this.rawDataSource.filter = '';
   }
