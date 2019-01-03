@@ -14,7 +14,7 @@ import {MatDialog, MatPaginator, MatSort, MatTableDataSource, PageEvent, MAT_TOO
 import {NewRowDialogComponent} from '../new-row-dialog/new-row-dialog.component';
 import {isNullOrUndefined} from 'util';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {FilterRowComponent} from '../filter-row/filter-row.component';
+import {FilterCellWrapperComponent} from '../filter-cell/filter-cell-wrapper.component';
 
 /** Custom options the configure the tooltip's default show/hide delays. */
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
@@ -57,10 +57,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() rowAdded: EventEmitter<any> = new EventEmitter();
   @Output() rowClicked: EventEmitter<any> = new EventEmitter();
   @Output() rowAction: EventEmitter<any> = new EventEmitter();
+  @Output() filterChanged: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChildren(FilterRowComponent) filterCells: Array<FilterRowComponent>
+  @ViewChildren(FilterCellWrapperComponent) filterCells: Array<FilterCellWrapperComponent>
   rawDataSource: MatTableDataSource<any> = new MatTableDataSource();
   paginatedDataSource: MatTableDataSource<any> = new MatTableDataSource();
   columnIndexes: Array<string> = [];
@@ -249,6 +250,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     this.filtersObj[column.accessor] = filterFunction;
 
     const setfilters = this.setfilters(this.filtersObj);
+    this.filterChanged.emit(this.filtersObj);
 
     this.rawDataSource.filterPredicate = function(data, filter: string): boolean {
       return setfilters(data);

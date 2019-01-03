@@ -93,7 +93,7 @@
           </button>
         </mat-cell>
         <mat-cell *ngFor="let column of columns">
-          <ngst-advanced-search [column]="column" (applyFilter)="applyFilter($event, column)" class="filter-cell"></ngst-advanced-search>
+          <ngst-filter-cell [column]="column" (applyFilter)="applyFilter($event, column)" class="filter-cell"></ngst-filter-cell>
         </mat-cell>
       </mat-header-cell>
     </ng-container>
