@@ -144,7 +144,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     this.combinedActions.push(...this.actions);
 
     // Show actions column?
-    if (this.combinedActions.length > 0) {
+    if (this.combinedActions.length > 0 || this.filters) {
       this.showActions = true;
       this.columnIndexes.push('ngst-actions');
     }
