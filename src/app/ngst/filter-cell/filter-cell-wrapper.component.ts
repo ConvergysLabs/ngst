@@ -1,5 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {BooleanFormatter, DigitsOfPrecisionFormatter, IntegerFormatter, StringFormatter} from '../table/ngst-model';
+import {
+  BooleanFormatter,
+  DigitsOfPrecisionFormatter,
+  IntegerFormatter,
+  SelectionFormatter,
+  StringFormatter
+} from '../table/ngst-model';
 import {FilterCellComponent} from './filter-cell';
 
 @Component({
@@ -25,7 +31,7 @@ export class FilterCellWrapperComponent implements OnInit {
       this.type = 'float';
     } else if (this.column.formatter instanceof BooleanFormatter) {
       this.type = 'bool';
-    } else if (this.column.formatter instanceof Selection) {
+    } else if (this.column.formatter instanceof SelectionFormatter) {
       this.type = 'selection';
     }
   }
