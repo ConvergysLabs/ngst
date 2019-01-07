@@ -1,0 +1,12 @@
+<div class="filter">
+  <div *ngIf="type === 'string'">
+    <ngst-string-filter #filterCell (applyFilter)="applyFilter.emit($event)" [label]="column.label"></ngst-string-filter>
+  </div>
+
+  <div *ngIf="type != 'string' && type != 'int' && type != 'float'"></div>
+
+  <div *ngIf="type === 'int' || type ==='float'">
+    <ngst-int-filter #filterCell (applyFilter)="applyFilter.emit($event)"></ngst-int-filter>
+  </div>
+</div>
+

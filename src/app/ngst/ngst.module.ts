@@ -26,12 +26,17 @@ import {SelectionInputComponent} from './inputs/selection-input/selection-input.
 import {BooleanInputComponent} from './inputs/boolean-input/boolean-input.component';
 import {TextAreaInputComponent} from './inputs/raw-input/text-area-input.component';
 import {DynamicCellComponent} from './dynamic-cell/dynamic-cell.component';
+import { FilterCellWrapperComponent } from './filter-cell/filter-cell-wrapper.component';
+import { IntFilterComponent } from './filter-cell/int-filter/int-filter.component';
+import {FilterCellComponent} from './filter-cell/filter-cell';
+import { StringFilterComponent } from './filter-cell/string-filter/string-filter.component';
 
 
 @NgModule({
   imports: [
     CommonModule,
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     BrowserAnimationsModule,
     MatButtonModule,
@@ -56,7 +61,11 @@ import {DynamicCellComponent} from './dynamic-cell/dynamic-cell.component';
     InputContainerComponent,
     NewRowDialogComponent,
     DynamicCellComponent,
-    StopPropogationDirective
+    StopPropogationDirective,
+    FilterCellWrapperComponent,
+    IntFilterComponent,
+    FilterCellComponent,
+    StringFilterComponent
   ],
   exports: [
     TableComponent,
@@ -66,6 +75,7 @@ import {DynamicCellComponent} from './dynamic-cell/dynamic-cell.component';
     BooleanInputComponent,
   ],
   entryComponents: [
+    FilterCellWrapperComponent,
     RawInputComponent,
     TextAreaInputComponent,
     SelectionInputComponent,

@@ -1,8 +1,20 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {Column, Action} from './ngst-model';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource, PageEvent, MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material';
 import {NewRowDialogComponent} from '../new-row-dialog/new-row-dialog.component';
 import {isNullOrUndefined} from 'util';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {FilterCellWrapperComponent} from '../filter-cell/filter-cell-wrapper.component';
 
 /** Custom options the configure the tooltip's default show/hide delays. */
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
@@ -15,9 +27,17 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   selector: 'ngst-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
-  providers: [
-    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults}
-  ]
+  providers: [ 
+    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults} 
+  ],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
+      state('expanded', style({ height: '*', visibility: 'visible' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
+
 
 })
 export class TableComponent implements OnInit, OnChanges, AfterViewInit {
@@ -26,6 +46,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() rowData: Array<any> = [];
   @Input() actions: Array<Action> = []; // User input actions
   @Input() pageSize = 10;
+  @Input() filters = false;
   @Input() canDelete: boolean;
   @Input() canEdit: boolean;
   @Input() canCreate: boolean;
@@ -36,9 +57,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() rowAdded: EventEmitter<any> = new EventEmitter();
   @Output() rowClicked: EventEmitter<any> = new EventEmitter();
   @Output() rowAction: EventEmitter<any> = new EventEmitter();
+  @Output() filterChanged: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChildren(FilterCellWrapperComponent) filterCells: Array<FilterCellWrapperComponent>
   rawDataSource: MatTableDataSource<any> = new MatTableDataSource();
   paginatedDataSource: MatTableDataSource<any> = new MatTableDataSource();
   columnIndexes: Array<string> = [];
@@ -53,14 +76,20 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   rows: number = 0;
   changeRowValue: boolean = false;
 
+  filtersOpen = false;
+  filtersObj = {};
+
   constructor(private dialog: MatDialog) {
   }
 
   ngOnInit() {
-    // this.updateTable();
+
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes) {
+    if (changes.columns && changes.columns.currentValue !== changes.columns.previousValue) {
+      this.clearFilters();
+    }
     this.updateTable();
   }
 
@@ -68,6 +97,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   updateTable() {    
+
+    this.rawDataSource.paginator = this.paginator;
 
     this.columnIndexes = [];
 
@@ -113,7 +144,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     this.combinedActions.push(...this.actions);
 
     // Show actions column?
-    if (this.combinedActions.length > 0) {
+    if (this.combinedActions.length > 0 || this.filters) {
       this.showActions = true;
       this.columnIndexes.push('ngst-actions');
     }
@@ -202,6 +233,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     return 'ngst-' + column.accessor;
   }
 
+
   checkDisabled(row, action){
     if(row.disabledActionNames && row.disabledActionNames.includes(action.name)){
       return true;
@@ -211,6 +243,47 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
       return false;
     }
     return row.disabled;
+  }
+
+  toggleFilters() {
+    this.filtersOpen = !this.filtersOpen;
+  }
+
+  applyFilter(filterFunction, column: Column) {
+    this.filtersObj[column.accessor] = filterFunction;
+
+    const setfilters = this.setfilters(this.filtersObj);
+    this.filterChanged.emit(this.filtersObj);
+
+    this.rawDataSource.filterPredicate = function(data, filter: string): boolean {
+      return setfilters(data);
+    };
+
+    if(Object.keys(this.filtersObj).length > 0){
+      this.rawDataSource.filter = 'This kicks off filters';
+    } else {
+      this.rawDataSource.filter = '';
+    }
+  }
+
+  setfilters(filters) {
+    const keys = Object.keys(filters);
+    return (data) => {
+      return keys.reduce((p,c) => {
+        return p && filters[c](data, c)
+      }, true);
+    }
+  }
+
+  clearFilters() {
+    if (this.filterCells) {
+      this.filterCells.map(cell => {
+        cell.clear();
+      });
+    }
+
+    this.filtersObj = {};
+    this.rawDataSource.filter = '';
   }
 }
 

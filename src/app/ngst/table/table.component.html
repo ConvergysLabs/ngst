@@ -12,10 +12,14 @@
   </div>
 
   <!--Table-->
-  <mat-table #table [dataSource]="paginatedDataSource" matSort (matSortChange)="doSort()">
+  <mat-table #table [dataSource]="rawDataSource" matSort (matSortChange)="doSort()">
     <!--Actions-->
     <ng-container matColumnDef="ngst-actions" *ngIf="showActions">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        <button *ngIf="filters" mat-icon-button (click)="toggleFilters()" >
+          <mat-icon>filter_list</mat-icon>
+        </button>
+      </mat-header-cell>
       <mat-cell *matCellDef="let row">
         <button mat-icon-button
                 matTooltip="{{action.tooltip}}"
@@ -33,13 +37,12 @@
     <ng-container *ngFor="let column of columns" [matColumnDef]="column.label">
       <mat-header-cell *matHeaderCellDef mat-sort-header>{{column.label}}</mat-header-cell>
       <mat-cell *matCellDef="let row">
-
-        <ng-container *ngIf="column.customComponent">
+        <ng-container *ngIf="column.customComponent && !row.filterRow">
           <ngst-dynamic-cell [component]="column.customComponent" [data]="row[column.accessor]"></ngst-dynamic-cell>
         </ng-container>
 
         <!--Edit-->
-        <div *ngIf="!column.customComponent">
+        <div *ngIf="!column.customComponent && !row.filterRow">
           <ng-container *ngIf="row === editRow && column === editColumn && column.editable && canEdit">
             <!--Polymorphism is hot!-->
             <ngst-input-container [item]="row"
@@ -51,6 +54,7 @@
 
           <!--Display-->
           <ng-container *ngIf="row != editRow || column != editColumn || !column.editable || !canEdit">
+
             <!--Not Editable-->
             <ng-container *ngIf="!column.editable || !canEdit || row.disabled">
               <div *ngIf="!isEmpty(column.getRowValue(row))"
@@ -81,7 +85,21 @@
       </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="expandedDetail">
+      <mat-header-cell *matHeaderCellDef class="filterRow">
+        <mat-cell *ngIf="showActions" class="mat-column-ngst-actions">
+          <button mat-icon-button (click)="clearFilters()">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-cell>
+        <mat-cell *ngFor="let column of columns">
+          <ngst-filter-cell [column]="column" (applyFilter)="applyFilter($event, column)" class="filter-cell"></ngst-filter-cell>
+        </mat-cell>
+      </mat-header-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="columnIndexes"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="['expandedDetail']" [@detailExpand]="filtersOpen ? 'expanded' : 'collapsed'"></mat-header-row>
     <mat-row *matRowDef="let row; columns: columnIndexes;"
              [class.ngst-clickable]="canClick"
              (click)="clickRow(row)"></mat-row>

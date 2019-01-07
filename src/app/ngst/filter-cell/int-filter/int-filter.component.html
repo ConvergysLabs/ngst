@@ -1,0 +1,13 @@
+<div class="int-field">
+  <mat-form-field class="comparator-select">
+    <mat-select [(ngModel)]="comparator" (selectionChange)="intFilter()">
+      <mat-option *ngFor="let comp of comparators" [value]="comp.name">
+        {{comp.symbol}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="intValue" (keyup)="intValueChange($event)" (focusout)="intFilter()">
+  </mat-form-field>
+</div>
+
