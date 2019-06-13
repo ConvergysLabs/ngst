@@ -4,7 +4,9 @@ import {RawInputComponent} from '../inputs/raw-input/raw-input.component';
 export class Column {
   public formatter: Formatter = new StringFormatter();
   public editor: Editor = new StringEditor();
+  public validator: Validator = new DefaultValidator();
   public input: Type<{}> = RawInputComponent;
+  public required: boolean = false;
   public editable: boolean = true;
   public customComponent: any;
   constructor(public label: string,
@@ -111,6 +113,16 @@ export interface Editor {
 export class StringEditor implements Editor {
   edit(row: any, column: Column, value: any) {
     row[column.accessor] = value;
+  }
+}
+
+export interface Validator {
+  validate(row: any, column: Column, value: any);
+}
+
+export class DefaultValidator implements Validator {
+  validate(row: any, column: Column, value: any) {
+    return true;
   }
 }
 
