@@ -126,12 +126,24 @@ export class StringEditor implements Editor {
 }
 
 export interface Validator {
+  errorMessage: string;
+
   validate(row: any, column: Column, value: any);
 }
 
 export class DefaultValidator implements Validator {
+  errorMessage = '';
+  
   validate(row: any, column: Column, value: any) {
     return true;
+  }
+}
+
+export class IntegerValidator implements Validator {
+  errorMessage = 'Must be a valid integer';
+
+  validate(row: any, column: Column, value: any) {
+    return Number.isInteger(value);
   }
 }
 

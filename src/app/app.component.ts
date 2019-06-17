@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {
   BooleanFormatter,
   Column, DigitsOfPrecisionFormatter, Editor, IntegerFormatter, PercentFormatter,
-  SelectionFormatter, SelectorItem, Action
+  SelectionFormatter, SelectorItem, Action, IntegerValidator
 } from './ngst/table/ngst-model';
 import {RawInputComponent} from './ngst/inputs/raw-input/raw-input.component';
 import {RowChangedEvent} from './ngst/table/table.component';
@@ -73,6 +73,7 @@ export class AppComponent {
     const column3 = new Column('Integer', 'integer');
     column3.formatter = new IntegerFormatter();
     column3.editor = new LinkedEditor();
+    column3.validator = new IntegerValidator();
 
     const column4 = new Column('Float', 'float');
     column4.formatter = new DigitsOfPrecisionFormatter(2);
