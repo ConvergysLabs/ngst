@@ -23,6 +23,16 @@ export class NewRowDialogComponent implements OnInit {
   }
 
   isValid() {
+    for (let column of this.columns) {
+      if (column.isRequiredAndEmpty(this.newRow)) {
+        return false;
+      }
+
+      if (!column.validator.validate(this.newRow, column, column.getRowValue(this.newRow))) {
+        return false;
+      }
+    }
+    
     return true;
   }
 }
