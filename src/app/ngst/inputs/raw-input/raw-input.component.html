@@ -4,11 +4,11 @@
          ngstStopPropogation
          [placeholder]="showPlaceholder ? column.label: ''"
          [(ngModel)]="value"
-         (change)="changed()">
+         (keyup)="changed()">
   <textarea *ngIf="type === TYPE_TEXT_AREA"
             matInput
             ngstStopPropogation
             [placeholder]="showPlaceholder ? column.label: ''"
             [(ngModel)]="value"
-            (change)="changed()"></textarea>
+            (keyup)="changed()"></textarea>
 </mat-form-field>

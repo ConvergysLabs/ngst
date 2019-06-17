@@ -65,9 +65,10 @@ export class AppComponent {
 
     /* Create column definitions */
     const column1 = new Column('Label', 'label');
+    column1.required = true;
 
     const column2 = new Column('No Edit', 'noedit');
-    // column2.editable = false;
+    column2.editable = false;
 
     const column3 = new Column('Integer', 'integer');
     column3.formatter = new IntegerFormatter();

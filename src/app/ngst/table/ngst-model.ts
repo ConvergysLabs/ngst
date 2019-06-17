@@ -20,6 +20,15 @@ export class Column {
   formatValue(rowData: any): string {
     return this.formatter.format(rowData, this);
   }
+
+  isRequiredAndEmpty(rowData: any): boolean {
+    if (!this.required) {
+      return false;
+    }
+
+    const currentRowValue = this.getRowValue(rowData);
+    return (!currentRowValue);
+  }
 }
 
 export interface Formatter {
