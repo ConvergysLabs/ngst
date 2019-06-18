@@ -9,8 +9,10 @@ export class Column {
   public required: boolean = false;
   public editable: boolean = true;
   public customComponent: any;
+  public errorAccessor: string;
   constructor(public label: string,
               public accessor: string) {
+    this.errorAccessor = `${accessor}-error`;
   }
 
   getRowValue(rowData: any): any {
@@ -19,6 +21,24 @@ export class Column {
 
   formatValue(rowData: any): string {
     return this.formatter.format(rowData, this);
+  }
+
+  setRowValueError(rowData: any) {
+    if (this.isRequiredAndEmpty(rowData)) {
+      rowData[this.errorAccessor] = `${this.label} is required`;
+      return;
+    }
+
+    if (!this.validator.validate(rowData, this, this.getRowValue(rowData))) {
+      rowData[this.errorAccessor] = this.validator.errorMessage;
+      return;
+    }
+
+    delete rowData[this.errorAccessor];
+  }
+
+  getRowValueError(rowData: any) {
+    return rowData[this.errorAccessor];
   }
 
   isRequiredAndEmpty(rowData: any): boolean {

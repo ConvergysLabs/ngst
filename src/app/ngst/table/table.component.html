@@ -82,6 +82,9 @@
             </ng-container>
           </ng-container>
         </div>
+
+        <!-- Errors for the current cell -->
+        <mat-error *ngIf="column.getRowValueError(row)">{{column.getRowValueError(row)}}</mat-error>
       </mat-cell>
     </ng-container>
 

@@ -7,9 +7,8 @@
                           [fullWidth]="true"
                           (changedEmitter)="change(column, $event)">
     </ngst-input-container>
-    <mat-error *ngIf="column.isRequiredAndEmpty(newRow)">{{column.label}} is required</mat-error>
-    <mat-error *ngIf="!column.isRequiredAndEmpty(newRow) && !column.validator.validate(newRow, column, column.getRowValue(newRow))">
-      {{column.validator.errorMessage}}
+    <mat-error *ngIf="column.getRowValueError(newRow)">
+      {{column.getRowValueError(newRow)}}
     </mat-error>
   </ng-container>
 

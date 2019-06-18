@@ -17,18 +17,18 @@ export class NewRowDialogComponent implements OnInit {
 
   change(column: Column, newValue: any) {
     column.editor.edit(this.newRow, column, newValue);
+    column.setRowValueError(this.newRow);
   }
 
   ngOnInit() {
+    for (let column of this.columns) {
+      column.setRowValueError(this.newRow);
+    }
   }
 
   isValid() {
     for (let column of this.columns) {
-      if (column.isRequiredAndEmpty(this.newRow)) {
-        return false;
-      }
-
-      if (!column.validator.validate(this.newRow, column, column.getRowValue(this.newRow))) {
+      if (column.getRowValueError(this.newRow)) {
         return false;
       }
     }
