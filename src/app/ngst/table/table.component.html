@@ -60,8 +60,12 @@
               <div *ngIf="!isEmpty(column.getRowValue(row))"
                    [class.ngst-clickable]="canClick"
                    [ngClass]="{'ngst-disabled' : row.disabled}"
-                   class="ngst-not-editable {{columnLabel(column)}}"
-                   [innerHTML]="column.formatValue(row)"></div>
+                   class="ngst-not-editable {{columnLabel(column)}}">
+                <div>
+                  <div [innerHTML]="column.formatValue(row)"></div>
+                  <mat-error *ngIf="column.getRowValueError(row)">{{column.getRowValueError(row)}}</mat-error>
+                </div>
+              </div>
               <div *ngIf="isEmpty(column.getRowValue(row))"
                    [ngClass]="{'ngst-disabled' : row.disabled}"
                    [class.ngst-clickable]="canClick"
@@ -73,8 +77,12 @@
             <ng-container *ngIf="column.editable && canEdit && !row.disabled">
               <div *ngIf="!isEmpty(column.getRowValue(row))"
                    (click)="clickCell(row, column)" ngstStopPropogation
-                   class="ngst-editable {{columnLabel(column)}}"
-                   [innerHTML]="column.formatValue(row)"></div>
+                   class="ngst-editable {{columnLabel(column)}}">
+                <div>
+                  <div [innerHTML]="column.formatValue(row)"></div>
+                  <mat-error *ngIf="column.getRowValueError(row)">{{column.getRowValueError(row)}}</mat-error>
+                </div>
+              </div>
               <div *ngIf="isEmpty(column.getRowValue(row))"
                    (click)="clickCell(row, column)" ngstStopPropogation
                    class="ngst-editable ngst-empty {{columnLabel(column)}}">empty
@@ -82,9 +90,6 @@
             </ng-container>
           </ng-container>
         </div>
-
-        <!-- Errors for the current cell -->
-        <mat-error *ngIf="column.getRowValueError(row)">{{column.getRowValueError(row)}}</mat-error>
       </mat-cell>
     </ng-container>
 
