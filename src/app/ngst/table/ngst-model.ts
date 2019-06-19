@@ -163,7 +163,7 @@ export class IntegerValidator implements Validator {
   errorMessage = 'Must be a valid integer';
 
   validate(row: any, column: Column, value: any) {
-    return Number.isInteger(value);
+    return /^-?[0-9]+$/g.test(value);
   }
 }
 
