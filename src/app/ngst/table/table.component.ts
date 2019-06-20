@@ -192,8 +192,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     const clone = Object.assign({}, ...row);
     const oldValue = column.getRowValue(row);
 
-    column.setRowValueError(row, newValue);
-    const rowValueError = column.getRowValueError(row);
+    column.setRowValueError(clone, newValue);
+    const rowValueError = column.getRowValueError(clone);
 
     // Trigger the RowChangedEvent to revert the display and fix the focus
     if (rowValueError) {
