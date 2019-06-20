@@ -18,7 +18,7 @@ export class NewRowDialogComponent implements OnInit {
   change(column: Column, newValue: any) {
     column.setRowValueError(this.newRow, newValue);
 
-    column.editor.edit(this.newRow, column, newValue);
+    column.editRowValue(this.newRow, newValue);
   }
 
   ngOnInit() {

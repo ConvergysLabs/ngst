@@ -202,7 +202,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     }
     
     // Update the clone with the new value
-    column.editor.edit(clone, column, newValue);
+    column.editRowValue(clone, newValue);
 
     const rowFound = this.rawDataSource.data.indexOf(row);
     this.rawDataSource.data[rowFound] = clone;

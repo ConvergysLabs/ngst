@@ -30,6 +30,6 @@ export class RawInputComponent {
   }
 
   changed() {
-    this.changedEmitter.emit(this.column.formatter.parse(this.value));
+    this.changedEmitter.emit(this.value);
   }
 }

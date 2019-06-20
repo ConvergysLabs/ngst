@@ -20,6 +20,10 @@ export class Column {
     return rowData[this.accessor];
   }
 
+  editRowValue(rowData: any, newValue) {
+    this.editor.edit(rowData, this, this.formatter.parse(newValue));
+  }
+
   formatValue(rowData: any): string {
     return this.formatter.format(rowData, this);
   }
