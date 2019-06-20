@@ -24,33 +24,32 @@ export class Column {
     return this.formatter.format(rowData, this);
   }
 
-  setRowValueError(rowData: any) {
-    if (this.isRequiredAndEmpty(rowData)) {
-      rowData[this.errorAccessor] = `${this.label} is required`;
+  setRowValueError(currentRow: any, newValue: any) {
+    if (this.isRequiredAndEmpty(newValue)) {
+      currentRow[this.errorAccessor] = `${this.label} is required`;
       return;
     }
 
-    if (!this.validator.validate(rowData, this, this.getRowValue(rowData))) {
-      rowData[this.errorAccessor] = this.validator.errorMessage;
+    if (!this.validator.validate(currentRow, this, newValue)) {
+      currentRow[this.errorAccessor] = this.validator.errorMessage;
       return;
     }
 
-    delete rowData[this.errorAccessor];
+    delete currentRow[this.errorAccessor];
   }
 
   getRowValueError(rowData: any) {
     return rowData[this.errorAccessor];
   }
 
-  isRequiredAndEmpty(rowData: any): boolean {
+  isRequiredAndEmpty(value: any): boolean {
     if (!this.required) {
       return false;
     }
 
-    const currentRowValue = this.getRowValue(rowData);
     return (
-      isNullOrUndefined(currentRowValue) ||
-      (currentRowValue === '')
+      isNullOrUndefined(value) ||
+      (value === '')
     );
   }
 }
@@ -152,13 +151,13 @@ export class StringEditor implements Editor {
 export interface Validator {
   errorMessage: string;
 
-  validate(row: any, column: Column, value: any);
+  validate(currentRow: any, column: Column, newValue: any);
 }
 
 export class DefaultValidator implements Validator {
   errorMessage = '';
   
-  validate(row: any, column: Column, value: any) {
+  validate(currentRow: any, column: Column, newValue: any) {
     return true;
   }
 }
@@ -166,8 +165,8 @@ export class DefaultValidator implements Validator {
 export class IntegerValidator implements Validator {
   errorMessage = 'Must be a valid integer';
 
-  validate(row: any, column: Column, value: any) {
-    return /^-?[0-9]+$/g.test(value);
+  validate(currentRow: any, column: Column, newValue: any) {
+    return /^-?[0-9]+$/g.test(newValue);
   }
 }
 

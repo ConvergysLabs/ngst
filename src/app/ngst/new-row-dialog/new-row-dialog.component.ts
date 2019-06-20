@@ -16,13 +16,14 @@ export class NewRowDialogComponent implements OnInit {
   }
 
   change(column: Column, newValue: any) {
+    column.setRowValueError(this.newRow, newValue);
+
     column.editor.edit(this.newRow, column, newValue);
-    column.setRowValueError(this.newRow);
   }
 
   ngOnInit() {
     for (let column of this.columns) {
-      column.setRowValueError(this.newRow);
+      column.setRowValueError(this.newRow, undefined);
     }
   }
 

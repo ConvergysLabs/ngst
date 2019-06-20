@@ -187,20 +187,22 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   changeRow(row: any, column: Column, newValue: any) {
     //Flag for change flow on update table
     this.changeRowValue = true;
+
     // Clone the user's data
     const clone = Object.assign({}, ...row);
     const oldValue = column.getRowValue(row);
+
+    column.setRowValueError(row, newValue);
+    const rowValueError = column.getRowValueError(row);
+
+    // Trigger the RowChangedEvent to revert the display and fix the focus
+    if (rowValueError) {
+      this.rowChanged.emit(new RowChangedEvent(row, clone, column, oldValue));
+      return;
+    }
     
     // Update the clone with the new value
     column.editor.edit(clone, column, newValue);
-    
-    column.setRowValueError(clone);
-    const rowValueError = column.getRowValueError(clone);
-
-    if (rowValueError) {
-      // Revert the clones value if there is an error present
-      column.editor.edit(clone, column, oldValue);
-    }
 
     const rowFound = this.rawDataSource.data.indexOf(row);
     this.rawDataSource.data[rowFound] = clone;
