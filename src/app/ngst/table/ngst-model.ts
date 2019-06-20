@@ -1,5 +1,6 @@
 import {Type} from '@angular/core';
 import {RawInputComponent} from '../inputs/raw-input/raw-input.component';
+import { isNullOrUndefined } from 'util';
 
 export class Column {
   public formatter: Formatter = new StringFormatter();
@@ -47,7 +48,10 @@ export class Column {
     }
 
     const currentRowValue = this.getRowValue(rowData);
-    return (!currentRowValue);
+    return (
+      isNullOrUndefined(currentRowValue) ||
+      (currentRowValue === '')
+    );
   }
 }
 
