@@ -83,7 +83,12 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit() {
-
+    for (let row of this.rowData) {
+      for (let column of this.columns) {
+        const currentRowValue = column.getRowValue(row);
+        column.setRowValueError(row, currentRowValue);
+      }
+    }
   }
 
   ngOnChanges(changes) {
