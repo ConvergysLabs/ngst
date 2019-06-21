@@ -23,7 +23,11 @@ yarn start
 #### Increment the version number
 In `src/app/ngst/package.json` increment `"version"`/
 
-#### Build NGST lib
+#### Build NgST lib
+```bash
+yarn build:lib
+```
+OR
 ```bash
 npm run build:lib
 ```
@@ -38,3 +42,8 @@ You will need to have npm permissions and be logged in. Your terminal will promp
 ```bash
 npm publish dist
 ```
+
+## Installing a local instance of NgST for testing
+1. [Build NgST lib](#build-ngst-lib)
+2. Navigate to the project directory you wish to install the previously built version of NgST
+3. `yarn add file:<\path\to\ngst\dist>` or `npm install <\path\to\ngst\dist>` __Note: This should only be done when developing changes for NgST. When actually install NgST simply `yarn add ngst` or `npm install ngst`__
