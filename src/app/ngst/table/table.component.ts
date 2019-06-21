@@ -83,12 +83,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit() {
-    for (let row of this.rowData) {
-      for (let column of this.columns) {
-        const currentRowValue = column.getRowValue(row);
-        column.setRowValueError(row, currentRowValue);
-      }
-    }
+    this.checkForErrors();
   }
 
   ngOnChanges(changes) {
@@ -96,9 +91,20 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
       this.clearFilters();
     }
     this.updateTable();
+    
+    this.checkForErrors();
   }
 
   ngAfterViewInit() {
+  }
+
+  checkForErrors() {
+    for (let row of this.rowData) {
+      for (let column of this.columns) {
+        const currentRowValue = column.getRowValue(row);
+        column.setRowValueError(row, currentRowValue);
+      }
+    }
   }
 
   updateTable() {    
