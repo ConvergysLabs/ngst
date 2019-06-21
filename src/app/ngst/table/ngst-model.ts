@@ -174,6 +174,14 @@ export class IntegerValidator implements Validator {
   }
 }
 
+export class FloatValidator implements Validator {
+  errorMessage = 'Must be a valid float';
+
+  validate(currentRow: any, column: Column, newValue: any) {
+    return /^-?[0-9]+$|^-?[0-9]+\.[0-9]+$/g.test(newValue);
+  }
+}
+
 
 export class SelectorItem {
   constructor(public description: string, public value: string | number) {
