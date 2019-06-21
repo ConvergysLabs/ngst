@@ -69,7 +69,11 @@
               <div *ngIf="isEmpty(column.getRowValue(row))"
                    [ngClass]="{'ngst-disabled' : row.disabled}"
                    [class.ngst-clickable]="canClick"
-                   class="ngst-not-editable ngst-empty {{columnLabel(column)}}">empty
+                   class="ngst-not-editable ngst-empty {{columnLabel(column)}}">
+                <div>
+                  empty
+                  <mat-error *ngIf="column.getRowValueError(row)">{{column.getRowValueError(row)}}</mat-error>
+                </div>
               </div>
             </ng-container>
 
@@ -85,7 +89,11 @@
               </div>
               <div *ngIf="isEmpty(column.getRowValue(row))"
                    (click)="clickCell(row, column)" ngstStopPropogation
-                   class="ngst-editable ngst-empty {{columnLabel(column)}}">empty
+                   class="ngst-editable ngst-empty {{columnLabel(column)}}">
+                <div>
+                  empty
+                  <mat-error *ngIf="column.getRowValueError(row)">{{column.getRowValueError(row)}}</mat-error>
+                </div>
               </div>
             </ng-container>
           </ng-container>
