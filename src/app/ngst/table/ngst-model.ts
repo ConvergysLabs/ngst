@@ -1,22 +1,60 @@
 import {Type} from '@angular/core';
 import {RawInputComponent} from '../inputs/raw-input/raw-input.component';
+import { isNullOrUndefined } from 'util';
 
 export class Column {
   public formatter: Formatter = new StringFormatter();
   public editor: Editor = new StringEditor();
+  public validator: Validator = new DefaultValidator();
   public input: Type<{}> = RawInputComponent;
+  public required: boolean = false;
   public editable: boolean = true;
   public customComponent: any;
+  public errorAccessor: string;
   constructor(public label: string,
               public accessor: string) {
+    this.errorAccessor = `${accessor}-error`;
   }
 
   getRowValue(rowData: any): any {
     return rowData[this.accessor];
   }
 
+  editRowValue(rowData: any, newValue) {
+    this.editor.edit(rowData, this, this.formatter.parse(newValue));
+  }
+
   formatValue(rowData: any): string {
     return this.formatter.format(rowData, this);
+  }
+
+  setRowValueError(currentRow: any, newValue: any) {
+    if (this.isRequiredAndEmpty(newValue)) {
+      currentRow[this.errorAccessor] = `${this.label} is required`;
+      return;
+    }
+
+    if (!this.validator.validate(currentRow, this, newValue)) {
+      currentRow[this.errorAccessor] = this.validator.errorMessage;
+      return;
+    }
+
+    delete currentRow[this.errorAccessor];
+  }
+
+  getRowValueError(rowData: any) {
+    return rowData[this.errorAccessor];
+  }
+
+  isRequiredAndEmpty(value: any): boolean {
+    if (!this.required) {
+      return false;
+    }
+
+    return (
+      isNullOrUndefined(value) ||
+      (value === '')
+    );
   }
 }
 
@@ -111,6 +149,36 @@ export interface Editor {
 export class StringEditor implements Editor {
   edit(row: any, column: Column, value: any) {
     row[column.accessor] = value;
+  }
+}
+
+export interface Validator {
+  errorMessage: string;
+
+  validate(currentRow: any, column: Column, newValue: any);
+}
+
+export class DefaultValidator implements Validator {
+  errorMessage = '';
+  
+  validate(currentRow: any, column: Column, newValue: any) {
+    return true;
+  }
+}
+
+export class IntegerValidator implements Validator {
+  errorMessage = 'Must be a valid integer';
+
+  validate(currentRow: any, column: Column, newValue: any) {
+    return /^-?[0-9]+$/g.test(newValue);
+  }
+}
+
+export class FloatValidator implements Validator {
+  errorMessage = 'Must be a valid float';
+
+  validate(currentRow: any, column: Column, newValue: any) {
+    return /^-?[0-9]+$|^-?[0-9]+\.[0-9]+$/g.test(newValue);
   }
 }
 

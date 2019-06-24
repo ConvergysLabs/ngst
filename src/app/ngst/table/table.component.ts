@@ -83,7 +83,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit() {
-
+    this.checkForErrors();
   }
 
   ngOnChanges(changes) {
@@ -91,9 +91,20 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
       this.clearFilters();
     }
     this.updateTable();
+    
+    this.checkForErrors();
   }
 
   ngAfterViewInit() {
+  }
+
+  checkForErrors() {
+    for (let row of this.rowData) {
+      for (let column of this.columns) {
+        const currentRowValue = column.getRowValue(row);
+        column.setRowValueError(row, currentRowValue);
+      }
+    }
   }
 
   updateTable() {    
@@ -184,19 +195,29 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  changeRow(row: any, column: Column, newValue: any) {    
+  changeRow(row: any, column: Column, newValue: any) {
     //Flag for change flow on update table
     this.changeRowValue = true;
+
     // Clone the user's data
     const clone = Object.assign({}, ...row);
+    const oldValue = column.getRowValue(row);
 
-    // Mutate the clone
-    column.editor.edit(clone, column, newValue);
+    column.setRowValueError(clone, newValue);
+    const rowValueError = column.getRowValueError(clone);
+
+    // Trigger the RowChangedEvent to revert the display and fix the focus
+    if (rowValueError) {
+      this.rowChanged.emit(new RowChangedEvent(row, clone, column, oldValue));
+      return;
+    }
+    
+    // Update the clone with the new value
+    column.editRowValue(clone, newValue);
 
     const rowFound = this.rawDataSource.data.indexOf(row);
     this.rawDataSource.data[rowFound] = clone;
 
-    
     // Let the user know that a change has occurred
     this.rowChanged.emit(new RowChangedEvent(row, clone, column, newValue));
   }

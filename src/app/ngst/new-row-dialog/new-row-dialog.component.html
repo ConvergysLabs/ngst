@@ -7,6 +7,9 @@
                           [fullWidth]="true"
                           (changedEmitter)="change(column, $event)">
     </ngst-input-container>
+    <mat-error *ngIf="column.getRowValueError(newRow)">
+      {{column.getRowValueError(newRow)}}
+    </mat-error>
   </ng-container>
 
   <div class="ngst-dialog-buttons">
