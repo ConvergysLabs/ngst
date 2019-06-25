@@ -92,7 +92,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     }
     this.updateTable();
     
-    this.checkForErrors();
+    if (changes.rowData && (JSON.stringify(changes.rowData.currentValue) != JSON.stringify(changes.rowData.previousValue))) {
+      this.checkForErrors();
+    }
   }
 
   ngAfterViewInit() {
