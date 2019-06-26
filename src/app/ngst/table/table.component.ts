@@ -92,7 +92,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     }
     this.updateTable();
     
-    this.checkForErrors();
+    if (changes.rowData && (JSON.stringify(changes.rowData.currentValue) != JSON.stringify(changes.rowData.previousValue))) {
+      this.checkForErrors();
+    }
   }
 
   ngAfterViewInit() {
@@ -199,19 +201,18 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     //Flag for change flow on update table
     this.changeRowValue = true;
 
-    // Clone the user's data
-    const clone = Object.assign({}, ...row);
-    const oldValue = column.getRowValue(row);
-
-    column.setRowValueError(clone, newValue);
-    const rowValueError = column.getRowValueError(clone);
-
-    // Trigger the RowChangedEvent to revert the display and fix the focus
+    // Check for errors before doing update
+    column.setRowValueError(row, newValue);
+    const rowValueError = column.getRowValueError(row);
+    
     if (rowValueError) {
-      this.rowChanged.emit(new RowChangedEvent(row, clone, column, oldValue));
+      this.updateTable();
       return;
     }
     
+    // Clone the user's data
+    const clone = Object.assign({}, ...row);
+
     // Update the clone with the new value
     column.editRowValue(clone, newValue);
 

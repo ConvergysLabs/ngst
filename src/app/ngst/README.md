@@ -193,3 +193,34 @@ However you can write your own `Editor` component and provide it to your `Column
 NgST plans to provide the following editors out of the box, soon:
 * `SelectionEditorComponent` - for using a selection from options instead of a string input during inline edits
 * `CheckboxEditorComponent` - for using a checkbox instead of a string input during inline edits
+
+#### Validators
+NgST allows for column value validation. It ships with the following validators:
+* `DefaultValidator` - Always returns true. Columns are configured with this validator by default.
+* `IntegerValidator` - Validates that values are valid integers.
+* `FloatValidator` - Validates that values are valid floats.
+
+Columns can be configured with these built in validators or custom validators. Custom validators can be implemented by extending the provided `Validator` interface:
+```typescript
+export interface Validator {
+  errorMessage: string;
+
+  validate(currentRow: any, column: Column, newValue: any);
+}
+```
+
+For reference this is the `IntegerValidator`:
+```typescript
+export class IntegerValidator implements Validator {
+  errorMessage = 'Must be a valid integer';
+
+  validate(currentRow: any, column: Column, newValue: any) {
+    return /^-?[0-9]+$/g.test(newValue);
+  }
+}
+```
+
+__Validator Considerations:__
+* Validation occurs over the `TableComponent`s `rowData` input property values on initialiation and changes.
+* Occurs on the `NewRowDialogComponent` and prevent creation of new rows until all validation passes
+* Occurs when inline row changes are made and prevents the `TableComponent`'s `rowChanged` event emitter from firing if validation fails.
