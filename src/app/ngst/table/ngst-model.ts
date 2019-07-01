@@ -28,13 +28,13 @@ export class Column {
     return this.formatter.format(rowData, this);
   }
 
-  setRowValueError(currentRow: any, newValue: any) {
+  setRowValueError(currentRow: any, newValue: any, rowData: Array<any>) {
     if (this.isRequiredAndEmpty(newValue)) {
       currentRow[this.errorAccessor] = `${this.label} is required`;
       return;
     }
 
-    if (!this.validator.validate(currentRow, this, newValue)) {
+    if (!this.validator.validate(currentRow, this, newValue, rowData)) {
       currentRow[this.errorAccessor] = this.validator.errorMessage;
       return;
     }
@@ -155,13 +155,13 @@ export class StringEditor implements Editor {
 export interface Validator {
   errorMessage: string;
 
-  validate(currentRow: any, column: Column, newValue: any);
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>);
 }
 
 export class DefaultValidator implements Validator {
   errorMessage = '';
   
-  validate(currentRow: any, column: Column, newValue: any) {
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>) {
     return true;
   }
 }
@@ -169,7 +169,7 @@ export class DefaultValidator implements Validator {
 export class IntegerValidator implements Validator {
   errorMessage = 'Must be a valid integer';
 
-  validate(currentRow: any, column: Column, newValue: any) {
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>) {
     return /^-?[0-9]+$/g.test(newValue);
   }
 }
@@ -177,7 +177,7 @@ export class IntegerValidator implements Validator {
 export class FloatValidator implements Validator {
   errorMessage = 'Must be a valid float';
 
-  validate(currentRow: any, column: Column, newValue: any) {
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>) {
     return /^-?[0-9]+$|^-?[0-9]+\.[0-9]+$/g.test(newValue);
   }
 }
