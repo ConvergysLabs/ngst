@@ -101,10 +101,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   checkForErrors() {
-    for (let row of this.rowData) {
+    for (let i in this.rowData) {
+      const row = this.rowData[i];
       for (let column of this.columns) {
         const currentRowValue = column.getRowValue(row);
-        column.setRowValueError(row, currentRowValue, this.rowData);
+        column.setRowValueError(row, currentRowValue, this.rowData, parseInt(i));
       }
     }
   }
@@ -202,7 +203,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     this.changeRowValue = true;
 
     // Check for errors before doing update
-    column.setRowValueError(row, newValue, this.rowData);
+    column.setRowValueError(row, newValue, this.rowData, null);
     const rowValueError = column.getRowValueError(row);
     
     if (rowValueError) {

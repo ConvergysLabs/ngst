@@ -28,13 +28,13 @@ export class Column {
     return this.formatter.format(rowData, this);
   }
 
-  setRowValueError(currentRow: any, newValue: any, rowData: Array<any>) {
+  setRowValueError(currentRow: any, newValue: any, rowData: Array<any>, currentRowIndex: number) {
     if (this.isRequiredAndEmpty(newValue)) {
       currentRow[this.errorAccessor] = `${this.label} is required`;
       return;
     }
 
-    if (!this.validator.validate(currentRow, this, newValue, rowData)) {
+    if (!this.validator.validate(currentRow, this, newValue, rowData, currentRowIndex)) {
       currentRow[this.errorAccessor] = this.validator.errorMessage;
       return;
     }
@@ -155,13 +155,13 @@ export class StringEditor implements Editor {
 export interface Validator {
   errorMessage: string;
 
-  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>);
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number);
 }
 
 export class DefaultValidator implements Validator {
   errorMessage = '';
   
-  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>) {
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number) {
     return true;
   }
 }
@@ -169,7 +169,7 @@ export class DefaultValidator implements Validator {
 export class IntegerValidator implements Validator {
   errorMessage = 'Must be a valid integer';
 
-  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>) {
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number) {
     return /^-?[0-9]+$/g.test(newValue);
   }
 }
@@ -177,8 +177,23 @@ export class IntegerValidator implements Validator {
 export class FloatValidator implements Validator {
   errorMessage = 'Must be a valid float';
 
-  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>) {
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number) {
     return /^-?[0-9]+$|^-?[0-9]+\.[0-9]+$/g.test(newValue);
+  }
+}
+
+export class UniqueStringValidator implements Validator {
+  errorMessage = 'Must be a unique value';
+  
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number) {
+    const columnValues = rowData.map(row => row[column.accessor]);
+
+    const currentFoundIndex = columnValues.indexOf(column.formatter.parse(newValue));
+
+    return (
+      (currentFoundIndex === -1) ||
+      (currentFoundIndex === currentRowIndex)
+    );
   }
 }
 

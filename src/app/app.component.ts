@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {
   BooleanFormatter,
   Column, DigitsOfPrecisionFormatter, Editor, IntegerFormatter, PercentFormatter,
-  SelectionFormatter, SelectorItem, Action, IntegerValidator, FloatValidator
+  SelectionFormatter, SelectorItem, Action, IntegerValidator, FloatValidator, UniqueStringValidator
 } from './ngst/table/ngst-model';
 import {RawInputComponent} from './ngst/inputs/raw-input/raw-input.component';
 import {RowChangedEvent} from './ngst/table/table.component';
@@ -66,6 +66,7 @@ export class AppComponent {
     /* Create column definitions */
     const column1 = new Column('Label', 'label');
     column1.required = true;
+    column1.validator = new UniqueStringValidator();
 
     const column2 = new Column('No Edit', 'noedit');
     column2.editable = false;
