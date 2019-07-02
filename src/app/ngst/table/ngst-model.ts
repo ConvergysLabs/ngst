@@ -183,7 +183,7 @@ export class FloatValidator implements Validator {
 }
 
 export class UniqueStringValidator implements Validator {
-  errorMessage = 'Must be a unique value';
+  errorMessage = 'Value already exists in column';
   
   validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number) {
     const columnValues = rowData.map(row => row[column.accessor]);
