@@ -66,7 +66,7 @@ export class AppComponent {
     /* Create column definitions */
     const column1 = new Column('Label', 'label');
     column1.required = true;
-    column1.validator = new UniqueStringValidator();
+    column1.validators.push(new UniqueStringValidator());
 
     const column2 = new Column('No Edit', 'noedit');
     column2.editable = false;
@@ -74,11 +74,11 @@ export class AppComponent {
     const column3 = new Column('Integer', 'integer');
     column3.formatter = new IntegerFormatter();
     column3.editor = new LinkedEditor();
-    column3.validator = new IntegerValidator();
+    column3.validators.push(new IntegerValidator());
 
     const column4 = new Column('Float', 'float');
     column4.formatter = new DigitsOfPrecisionFormatter(2);
-    column4.validator = new FloatValidator();
+    column4.validators.push(new FloatValidator());
 
     const column5 = new Column('Percent', 'percent');
     column5.formatter = new PercentFormatter(2);

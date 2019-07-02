@@ -5,7 +5,7 @@ import { isNullOrUndefined } from 'util';
 export class Column {
   public formatter: Formatter = new StringFormatter();
   public editor: Editor = new StringEditor();
-  public validator: Validator = new DefaultValidator();
+  public validators: Validator[] = [];
   public input: Type<{}> = RawInputComponent;
   public required: boolean = false;
   public editable: boolean = true;
@@ -34,9 +34,11 @@ export class Column {
       return;
     }
 
-    if (!this.validator.validate(currentRow, this, newValue, rowData, currentRowIndex)) {
-      currentRow[this.errorAccessor] = this.validator.errorMessage;
-      return;
+    for (let validator of this.validators) {
+      if (!validator.validate(currentRow, this, newValue, rowData, currentRowIndex) {
+        currentRow[this.errorAccessor] = validator.errorMessage;
+        return;
+      }
     }
 
     delete currentRow[this.errorAccessor];
