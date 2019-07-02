@@ -35,7 +35,7 @@ export class Column {
     }
 
     for (let validator of this.validators) {
-      if (!validator.validate(currentRow, this, newValue, rowData, currentRowIndex) {
+      if (!validator.validate(currentRow, this, newValue, rowData, currentRowIndex)) {
         currentRow[this.errorAccessor] = validator.errorMessage;
         return;
       }
