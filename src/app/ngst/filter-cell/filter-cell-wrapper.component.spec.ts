@@ -17,7 +17,7 @@ describe('FilterCellWrapperComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FilterCellWrapperComponent);
-    component = fixture.componentInstance;
+    component = fixture.componentInstance;    
     fixture.detectChanges();
   });
 

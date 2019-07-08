@@ -1,6 +1,6 @@
 import {Component, Injectable, NgModule} from "@angular/core";
 import {BehaviorSubject, Observable, of} from "rxjs";
-import {MatSelectModule, MatSnackBarConfig, MatSnackBarRef, SimpleSnackBar} from '@angular/material';
+import {MatSelectModule, MatSnackBarConfig, MatSnackBarRef, SimpleSnackBar, MatDialog } from '@angular/material';
 
 export class MockMatDialogRef {
 
@@ -15,6 +15,14 @@ export class MockMatDialogRef {
 
 @Injectable()
 export class MockMatDialogData {
+  public map() {
+
+  }
+}
+
+
+@Injectable()
+export class MockMatDialog {
   public map() {
 
   }
