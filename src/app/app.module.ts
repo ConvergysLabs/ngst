@@ -5,7 +5,6 @@ import {NgstModule} from './ngst/ngst.module';
 import { DemoComponent } from './demo/demo.component';
 import {MatButtonModule} from '@angular/material/button';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,7 +13,7 @@ import {MatButtonModule} from '@angular/material/button';
   imports: [
     BrowserModule,
     MatButtonModule,
-    NgstModule
+    NgstModule    
   ],
   exports: [
   ],

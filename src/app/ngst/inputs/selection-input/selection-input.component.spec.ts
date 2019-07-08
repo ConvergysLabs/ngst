@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectionInputComponent } from './selection-input.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('SelectionInputComponent', () => {
   let component: SelectionInputComponent;
@@ -8,7 +9,8 @@ describe('SelectionInputComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelectionInputComponent ]
+      declarations: [ SelectionInputComponent ],
+      schemas : [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));

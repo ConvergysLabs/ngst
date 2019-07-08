@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TableComponent } from './table.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MockMatDialogRef, MockMatDialogData } from '../../testing/material.mock';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 describe('TableComponent', () => {
   let component: TableComponent;
@@ -8,7 +11,9 @@ describe('TableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TableComponent ]
+      declarations: [ TableComponent ],
+      providers:  [{ provide: MatDialogRef, useValue : MockMatDialogRef}],
+      schemas : [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));
