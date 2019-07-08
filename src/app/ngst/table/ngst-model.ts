@@ -160,14 +160,6 @@ export interface Validator {
   validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number);
 }
 
-export class DefaultValidator implements Validator {
-  errorMessage = '';
-  
-  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number) {
-    return true;
-  }
-}
-
 export class IntegerValidator implements Validator {
   errorMessage = 'Must be a valid integer';
 
