@@ -10,20 +10,22 @@ import {Column} from '../table/ngst-model';
 export class NewRowDialogComponent implements OnInit {
   newRow = {};
   columns: Array<Column> = [];
+  rowData: Array<any> = [];
 
   constructor(public dialogRef: MatDialogRef<NewRowDialogComponent>, @Inject(MAT_DIALOG_DATA) private data: any) {
-    this.columns = data;
+    this.columns = data.columns;
+    this.rowData = data.rowData;
   }
 
   change(column: Column, newValue: any) {
-    column.setRowValueError(this.newRow, newValue);
+    column.setRowValueError(this.newRow, newValue, this.rowData, null);
 
     column.editRowValue(this.newRow, newValue);
   }
 
   ngOnInit() {
     for (let column of this.columns) {
-      column.setRowValueError(this.newRow, undefined);
+      column.setRowValueError(this.newRow, undefined, this.rowData, null);
     }
   }
 

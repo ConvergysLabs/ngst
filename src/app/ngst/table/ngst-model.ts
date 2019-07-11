@@ -5,7 +5,7 @@ import { isNullOrUndefined } from 'util';
 export class Column {
   public formatter: Formatter = new StringFormatter();
   public editor: Editor = new StringEditor();
-  public validator: Validator = new DefaultValidator();
+  public validators: Validator[] = [];
   public input: Type<{}> = RawInputComponent;
   public required: boolean = false;
   public editable: boolean = true;
@@ -28,15 +28,17 @@ export class Column {
     return this.formatter.format(rowData, this);
   }
 
-  setRowValueError(currentRow: any, newValue: any) {
+  setRowValueError(currentRow: any, newValue: any, rowData: Array<any>, currentRowIndex: number) {
     if (this.isRequiredAndEmpty(newValue)) {
       currentRow[this.errorAccessor] = `${this.label} is required`;
       return;
     }
 
-    if (!this.validator.validate(currentRow, this, newValue)) {
-      currentRow[this.errorAccessor] = this.validator.errorMessage;
-      return;
+    for (let validator of this.validators) {
+      if (!validator.validate(currentRow, this, newValue, rowData, currentRowIndex)) {
+        currentRow[this.errorAccessor] = validator.errorMessage;
+        return;
+      }
     }
 
     delete currentRow[this.errorAccessor];
@@ -155,21 +157,13 @@ export class StringEditor implements Editor {
 export interface Validator {
   errorMessage: string;
 
-  validate(currentRow: any, column: Column, newValue: any);
-}
-
-export class DefaultValidator implements Validator {
-  errorMessage = '';
-  
-  validate(currentRow: any, column: Column, newValue: any) {
-    return true;
-  }
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number);
 }
 
 export class IntegerValidator implements Validator {
   errorMessage = 'Must be a valid integer';
 
-  validate(currentRow: any, column: Column, newValue: any) {
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number) {
     return /^-?[0-9]+$/g.test(newValue);
   }
 }
@@ -177,8 +171,23 @@ export class IntegerValidator implements Validator {
 export class FloatValidator implements Validator {
   errorMessage = 'Must be a valid float';
 
-  validate(currentRow: any, column: Column, newValue: any) {
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number) {
     return /^-?[0-9]+$|^-?[0-9]+\.[0-9]+$/g.test(newValue);
+  }
+}
+
+export class UniqueStringValidator implements Validator {
+  errorMessage = 'Value already exists in column';
+  
+  validate(currentRow: any, column: Column, newValue: any, rowData: Array<any>, currentRowIndex: number) {
+    const columnValues = rowData.map(row => row[column.accessor]);
+
+    const currentFoundIndex = columnValues.indexOf(column.formatter.parse(newValue));
+
+    return (
+      (currentFoundIndex === -1) ||
+      (currentFoundIndex === currentRowIndex)
+    );
   }
 }
 
