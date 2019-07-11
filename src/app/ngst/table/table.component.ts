@@ -27,8 +27,8 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   selector: 'ngst-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
-  providers: [ 
-    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults} 
+  providers: [
+    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults}
   ],
   animations: [
     trigger('detailExpand', [

@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FilterCellWrapperComponent } from './filter-cell-wrapper.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('FilterCellWrapperComponent', () => {
   let component: FilterCellWrapperComponent;
@@ -8,14 +9,15 @@ describe('FilterCellWrapperComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FilterCellWrapperComponent ]
+      declarations: [ FilterCellWrapperComponent ],
+      schemas : [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FilterCellWrapperComponent);
-    component = fixture.componentInstance;
+    component = fixture.componentInstance;    
     fixture.detectChanges();
   });
 
